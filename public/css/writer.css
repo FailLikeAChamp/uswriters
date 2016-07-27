@@ -1,0 +1,9 @@
+button#submit {
+	margin: 30px auto;
+}
+
+a.logout {
+	float: right;
+	margin-top: -20px;
+	margin-right: 20px;
+}

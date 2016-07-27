@@ -1,0 +1,55 @@
+{% set namespace = 'Plasticbrain\\FlashMessages\\' %}
+
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+Admin Login
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="../public/css/login.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<form id="admin-login" class="form-signin" method="POST" action="authenticate-admin.php">
+
+		<h2 class="form-signin-heading">Admin Sign In</h2>
+
+		<label for="inputUsername" class="sr-only">Username</label>
+	
+		<input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+	
+		<label for="inputPassword" class="sr-only">Password</label>
+	
+		<input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+	
+		<button id="submit-btn" class="btn btn-lg btn-primary btn-block login-submit" type="submit">Sign in</button>
+
+		<div class="row">
+			<div class="col-md-12">
+		 		{% if flash.hasErrors() %}
+		 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
+		 		{% endif %}
+		 	</div>
+	 	</div>
+
+	</form>
+
+</div> <!-- /container -->
+
+<div class="container">
+	
+	<div class="row">
+		
+		<div class="col-xs-12">
+				
+				<a class="admin-login-link" href="../writer/login">Writer Login</a>
+
+		</div>
+
+	</div>
+
+</div>
+{% endblock %}

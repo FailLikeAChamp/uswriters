@@ -1,0 +1,5 @@
+app/views_cache/*
+/vendor/*
+.htaccess
+composer.json
+composer.lock

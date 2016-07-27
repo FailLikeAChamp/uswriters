@@ -1,0 +1,67 @@
+{% set namespace = 'Plasticbrain\\FlashMessages\\' %}
+
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+Admin | New PenPal
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="../public/css/writer.css">
+{% endblock %}
+
+{% block navbar %}
+{% include 'admin-navbar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<div class="row">
+
+		<div class="col-sm-6 col-sm-offset-2">
+		
+			<h2>Assign a Writer to a Contact</h2>
+
+			<hr>
+
+		</div>
+	
+	</div>
+
+	<div class="form-group col-sm-6 col-sm-offset-2">
+
+		<form id="create-contact" class="form-horizontal" method="POST" action="assign-contacts.php">
+
+			<label class="control-label" for="writer_id">Writer: </label>
+			<select name="writer_id" id="writer_id" class="form-control">
+				<option></option>
+				{% for writer in writers %}
+					<option value="{{ writer.id }}">{{ writer.name | title }}</option>
+				{% endfor %}
+			</select>
+
+			<label class="control-label" for="contact_id">Contact: </label>
+			<select name="contact_id" id="contact_id" class="form-control">
+				<option></option>
+				{% for contact in contacts %}
+					<option value="{{ contact.id }}">{{ contact.name | title }}</option>
+				{% endfor %}
+			</select>
+
+			<button id="submit" type="submit" class="btn btn-primary">Assign PenPal</button>
+
+			<div class="row">
+				<div class="col-sm-12 col-md-offset-2">
+					{% if flash.hasErrors() %}
+			 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
+			 		{% endif %}
+		 		</div>
+			</div>
+
+		</form>
+	
+	</div>
+
+</div> <!-- /container -->
+{% endblock %}

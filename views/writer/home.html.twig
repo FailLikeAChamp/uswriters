@@ -1,0 +1,114 @@
+{% set namespace = 'Plasticbrain\\FlashMessages\\' %}
+
+{% extends "layout.html.twig" %}
+
+{% block title %}
+	Us Writers
+{%  endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="../public/css/writer.css">
+{% endblock %}
+
+{% block content %}
+<a class="logout btn btn-primary btn-xs" href="../writer/logout-writer.php">Logout</a>
+
+<div class="container">
+
+	<div class="row">
+		<div class="col-md-12">
+			{% if flash.hasMessages(constant(namespace~'FlashMessages::SUCCESS')) %}
+				{{ flash.display(constant(namespace~'FlashMessages::SUCCESS')) }}
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="write-letter-container">
+
+		<h2 class="letter-form-header">Write a letter</h2>
+
+		<div class="dropdown">
+
+			<button id="contact-list" type="button" class="contact-list-toggle btn btn-primary" 
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Select A Contact
+				<span class="caret"></span>
+			</button>
+
+			<ul class="dropdown-menu" aria-labelledby="contact-list">
+				{% if contacts | length > 0 %}
+					{% for contact in contacts %}
+							<li data-id="{{ contact.id }}">{{ contact.name | title }}</li>
+					{% endfor %}
+				{% else %}
+					<li>No Contacts</li>
+				{% endif %}
+			</ul>
+
+		</div>
+
+		<form action="" id="letter-form">
+
+			<textarea name="" id="letter" cols="30" rows="10" class="form-control"></textarea>
+
+			<input class="btn btn-primary submit" type="submit" value="Submit Letter">
+
+		</form>
+
+	</div>
+
+	<hr class="hr">
+	
+	<div class="incoming-letters">
+
+		<h2 class="recieved-letters">Recieved Letters</h2>
+			
+			
+		<div class="date-input-group">
+			<label for="start-date">Start Date: </label>
+			<input id="start-date" type="text" class="date-select datepicker">
+		</div>
+	
+		<div class="date-input-group">
+			<label for="end-date">End Date: </label>
+			<input id="end-date" type="text" class="date-select datepicker">
+		</div>
+
+
+		<button id="date-filter" type="button" class="btn btn-primary btn-sm">
+			Filter Letters
+		</button>
+
+		<div class="letters-container">
+			
+
+		</div>
+
+	</div>
+
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+	$( function() {
+		$( ".datepicker" ).datepicker({dateFormat: 'mm-dd-yy'});
+	} );
+</script>
+
+<script type="text/javascript">
+	
+$(document).ready(function() {
+
+	$("ul.dropdown-menu li").click(function() {
+
+		if ($(this).text() !== "No Contacts") {
+			$("#contact-list").text($(this).text()).append(" <span class='caret'></span>");
+		}
+
+	});
+
+});
+
+</script>
+{% endblock %}
