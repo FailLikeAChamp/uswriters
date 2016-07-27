@@ -16,9 +16,9 @@ class Writer extends Model
 		array('gender', 'message' => 'cannot be blank', 'on' => 'create')
 	);
 
-	static $before_create = array('hashPassword', 'lowercaseName');
+	static $before_create = array('hashPassword', 'lowercaseEmail');
 
-	static $before_save = array('lowercaseName');
+	static $before_save = array('lowercaseEmail');
 
 	static $has_many = array(	
 		array('contacts', 'through' => 'writers2contacts'),
@@ -36,14 +36,8 @@ class Writer extends Model
 		$this->password = password_hash($this->password, PASSWORD_BCRYPT, array('cost' => 10));
 	}
 
-	public function lowercaseName() 
+	public function lowercaseEmail() 
 	{
-		$this->username = strtolower($this->username);
+		$this->email = strtolower($this->email);
 	}
-
-	public function getLetters()
-	{
-		
-	}
-
 }
