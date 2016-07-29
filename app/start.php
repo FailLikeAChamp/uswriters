@@ -8,9 +8,9 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 ActiveRecord\Config::initialize(function($config)
 {
 	$config->set_connections([
-		"production" => "mysql://uslepers_brian:qFeFImm#Lh]a@localhost/uslepers_uswriters"
+		"development" => "mysql://root:root@localhost/uswriters"
 	]);
-	$config->set_default_connection('production');
+	$config->set_default_connection('development');
 });
 
 $loader = new Twig_Loader_Filesystem();
