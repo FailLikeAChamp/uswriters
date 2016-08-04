@@ -7,3 +7,11 @@ a.logout {
 	margin-top: -20px;
 	margin-right: 20px;
 }
+
+form#name {
+	margin-bottom: 15px;
+}
+
+form#name label {
+	display: block;
+}

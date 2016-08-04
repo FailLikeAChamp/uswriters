@@ -23,16 +23,23 @@ Admin | Edit Writer
 		
 			<h2>Edit Writer</h2>
 
-			<form action="" method="POST">
-				<select name="writer_id">
+			<hr>
+
+			<form id="name" action="" method="POST">
+
+				<label for="nameSelect">Select A Writer: </label>
+				<select id="nameSelect" name="writer_id">
+						<option value=""></option>
 				{% for w in allWriters %}
 						<option value="{{ w.id }}">{{ w.name | title }}</option>
 				{% endfor %}
 				</select>
-				<button class="btn btn-primary btn-sm" type="submit">Select</button>
+
+				<button class="btn btn-primary btn-xs" type="submit">Select</button>
+
 			</form>
 
-			<hr>
+			
 
 		</div>
 	
@@ -40,7 +47,7 @@ Admin | Edit Writer
 
 	<div class="form-group col-sm-6 col-sm-offset-2">
 
-		<form id="create-writer" class="form-horizontal" method="POST" action="create-writer.php">
+		<form id="create-writer" class="form-horizontal" method="POST" action="edit.php">
 
 			<label class="control-label" for="email">Email: </label><input class="form-control" id="email" type="email" name="email" value="{{ writer.email }}" required="">
 
@@ -54,6 +61,7 @@ Admin | Edit Writer
 		
 			<label class="control-label" for="state">State: </label>
 			<select id="state" name="state" class="form-control">
+				<option value="{{ writer.state }}">{{ writer.state }}</option>
 				<option value="AL">Alabama</option>
 				<option value="AK">Alaska</option>
 				<option value="AZ">Arizona</option>
