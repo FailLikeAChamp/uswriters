@@ -22,4 +22,8 @@ $twig = new Twig_Environment($loader, array(
     'cache' => false,
 ));
 
+$root = "/uswriters";
+
+$twig->addGlobal('root', $root);
+
 $flash = new FlashMessages();

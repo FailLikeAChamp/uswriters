@@ -3,7 +3,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-Admin | New Contact
+Admin | Assign PenPal
 {% endblock %}
 
 {% block css %}
@@ -20,8 +20,20 @@ Admin | New Contact
 	<div class="row">
 
 		<div class="col-sm-6 col-sm-offset-2">
+
+			{% if flash.hasErrors() %}
+	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
+	 		{% endif %}
+
+ 		</div>
+
+	</div>
+
+	<div class="row">
+
+		<div class="col-sm-6 col-sm-offset-2">
 		
-			<h2>Assign a Writer a Contact</h2>
+			<h2>Assign a PenPal</h2>
 
 			<hr>
 
@@ -31,7 +43,7 @@ Admin | New Contact
 
 	<div class="form-group col-sm-6 col-sm-offset-2">
 
-		<form id="create-contact" class="form-horizontal" method="POST" action="assign-contacts.php">
+		<form id="create-contact" class="form-horizontal" method="POST" action="assign-penpal.php">
 
 			<label class="control-label" for="writer_id">Writer: </label>
 			<select name="writer_id" id="writer_id" class="form-control">
@@ -50,14 +62,6 @@ Admin | New Contact
 			</select>
 
 			<button id="submit" type="submit" class="btn btn-primary">Assign PenPal</button>
-
-			<div class="row">
-				<div class="col-sm-12 col-md-offset-2">
-					{% if flash.hasErrors() %}
-			 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
-			 		{% endif %}
-		 		</div>
-			</div>
 
 		</form>
 	

@@ -15,4 +15,4 @@ if (isset($_POST['writer_id'])) {
 
 $allWriters = Writer::all();
 
-echo $twig->render('@admin/edit-writer.html.twig', array('writer' => $writer, 'allWriters' => $allWriters));
+echo $twig->render('@admin/edit-writer.html.twig', array('writer' => $writer, 'allWriters' => $allWriters, 'username' => $_SESSION['admin_username']));
