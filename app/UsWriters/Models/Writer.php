@@ -16,9 +16,11 @@ class Writer extends Model
 		array('gender', 'message' => 'cannot be blank', 'on' => 'create')
 	);
 
-	static $before_create = array('hashPassword', 'lowercaseEmail');
+	static $before_create = array('hashPassword', 'lowercaseEmail', 'cleanPhone');
 
-	static $before_save = array('lowercaseEmail');
+	static $before_save = array('cleanPhone', 'lowercaseEmail');
+
+	static $before_update = array('cleanPhone', 'lowercaseEmail');
 
 	static $has_many = array(	
 		array('contacts', 'through' => 'writers2contacts'),
@@ -39,5 +41,11 @@ class Writer extends Model
 	public function lowercaseEmail() 
 	{
 		$this->email = strtolower($this->email);
+	}
+
+	public function cleanPhone()
+	{
+		$this->phone = preg_replace("/[^0-9]/", "", $this->phone);
+
 	}
 }

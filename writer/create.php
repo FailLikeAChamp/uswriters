@@ -9,10 +9,10 @@ $writer = Writer::create($_POST);
 
 if ($writer->is_invalid()) {
 	$error = $writer->errors->full_messages();
-	$flash->error($error[0], 'new-writer');
+	$flash->error($error[0], 'new');
 	exit();
 }
 
 $name = ucwords($writer->name);
 
-$flash->success("Writer '{$name}' created successfully!", "home");
+$flash->success("Writer '{$name}' created successfully!", "../admin/home");

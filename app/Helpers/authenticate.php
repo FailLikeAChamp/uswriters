@@ -31,6 +31,7 @@ function authenticateWriter($email, $password)
 
 	if($writer != null && $writer->login($password)) {
 		$_SESSION['writer_id'] = $writer->id;
+		$_SESSION['writer_name'] = $writer->name;
 		$name = ucwords($writer->name);
 		$flash->success("Welcome, {$name}", "/uswriters/writer/home");
 		exit();

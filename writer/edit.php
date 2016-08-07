@@ -1,6 +1,4 @@
 <?php 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require_once('../app/start.php');
 
 use \UsWriters\Models\Writer;
@@ -15,4 +13,4 @@ if (isset($_POST['writer_id'])) {
 
 $allWriters = Writer::all();
 
-echo $twig->render('@admin/edit-writer.html.twig', array('writer' => $writer, 'allWriters' => $allWriters, 'username' => $_SESSION['admin_username']));
+echo $twig->render('@admin/edit-writer.html.twig', array('flash' => $flash, 'writer' => $writer, 'allWriters' => $allWriters, 'username' => $_SESSION['admin_username']));

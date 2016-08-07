@@ -1,0 +1,90 @@
+{% set namespace = 'Plasticbrain\\FlashMessages\\' %}
+
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+Admin | Edit Prison
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="../public/css/writer.css">
+{% endblock %}
+
+{% block navbar %}
+{% include 'admin-navbar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-2">
+			{% if flash.hasMessages(constant(namespace~'FlashMessages::SUCCESS')) %}
+				{{ flash.display(constant(namespace~'FlashMessages::SUCCESS')) }}
+			{% endif %}
+			{% if flash.hasErrors() %}
+	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
+	 		{% endif %}
+		</div>
+	</div>
+
+	<div class="row">
+
+		<div class="col-sm-6 col-sm-offset-2">
+		
+			<h2>Edit Prison</h2>
+
+			<hr>
+
+			<form id="name" action="" method="POST">
+
+				<label for="nameSelect">Select A Prison: </label>
+				<select id="nameSelect" name="prison_id">
+						<option value=""></option>
+				{% for p in allPrisons %}
+						<option value="{{ p.id }}">{{ p.name | title }}</option>
+				{% endfor %}
+				</select>
+
+				<button class="btn btn-primary btn-xs" type="submit">Select</button>
+
+			</form>
+
+			
+
+		</div>
+	
+	</div>
+	
+	{% if prison.id %}
+	<div class="form-group col-sm-6 col-sm-offset-2">
+
+		<form id="create-contact" class="form-horizontal" method="POST" action="update.php">
+
+			<label class="control-label" for="name">Name: </label><input class="form-control" id="name" type="text" name="name" value="{{ prison.name }}" required>
+
+			<label class="control-label" for="address_1">Address 1: </label><input class="form-control" id="address_1" type="text" name="address_1" value="{{ prison.address_1 }}" required>
+
+			<label class="control-label" for="address_2">Address 2: </label><input class="form-control" id="address_2" type="text" name="address_2" value="{{ prison.address_2 }}">
+
+			<label class="control-label" for="city">City: </label><input class="form-control" id="city" type="text" name="city" value="{{ prison.city }}" required>
+		
+			<label class="control-label" for="state">State: </label>
+			<select id="state" name="state" class="form-control">
+				<option value="{{ prison.state }}">{{ prison.state }}</option>
+				{% include 'states.html.twig' %}
+			</select>
+
+			<label class="control-label postal" for="postal_code">Postal Code: </label><input class="form-control postal" id="postal_code" type="text" name="postal_code" value="{{ prison.postal_code }}" required>
+
+			<input type="hidden" name="id" value="{{ prison.id }}">
+
+			<button id="submit" type="submit" class="btn btn-primary">Update Prison</button>
+
+		</form>
+	
+	</div>
+	{% endif %}
+	
+</div> <!-- /container -->
+{% endblock %}

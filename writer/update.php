@@ -5,7 +5,7 @@ use \UsWriters\Models\Writer;
 
 isAdminLoggedOut();
 
-$writer = Writer::find_by_email($_POST['email']);
+$writer = Writer::find($_POST['id']);
 
 $writer->update_attributes($_POST);
 
@@ -17,4 +17,4 @@ if ($writer->is_invalid()) {
 
 $name = ucwords($writer->name);
 
-$flash->success("Writer '{$name}' successfully updated!", "home");
+$flash->success("Writer '{$name}' successfully updated!", "edit");
