@@ -15,4 +15,4 @@ if ($contact->is_invalid()) {
 
 $name = ucwords($contact->name);
 
-$flash->success("Contact '{$name}' created successfully!", "home");
+$flash->success("Contact '{$name}' created successfully!", "../admin/home");

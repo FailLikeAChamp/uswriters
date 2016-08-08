@@ -15,4 +15,4 @@ if ($prison->is_invalid()) {
 
 $name = ucwords($prison->name);
 
-$flash->success("'{$name}' prison created successfully!", "home");
+$flash->success("'{$name}' prison created successfully!", "../admin/home");

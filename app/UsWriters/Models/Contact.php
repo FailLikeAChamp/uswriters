@@ -6,7 +6,8 @@ use \ActiveRecord\Model;
 class Contact extends Model
 {
 	static $belongs_to = array(
-		array('prison')
+		array('prison'),
+		array('admin')
 	);
 
 	static $has_many = array(
@@ -14,4 +15,5 @@ class Contact extends Model
 		array('writers2contacts'),
 		array('letters')
 	);
+	
 }

@@ -22,6 +22,10 @@ class Writer extends Model
 
 	static $before_update = array('cleanPhone', 'lowercaseEmail');
 
+	static $belongs_to = array(
+		array('admin')
+	);
+
 	static $has_many = array(	
 		array('contacts', 'through' => 'writers2contacts'),
 		array('writers2contacts'),
