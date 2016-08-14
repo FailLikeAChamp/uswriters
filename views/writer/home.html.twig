@@ -3,16 +3,19 @@
 {% extends "layout.html.twig" %}
 
 {% block title %}
-	Us Writers
+Home
 {%  endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="../public/css/writer.css">
 {% endblock %}
 
-{% block content %}
-<a class="logout btn btn-primary btn-xs" href="../writer/logout-writer.php">Logout</a>
 
+{% block navbar %}
+{% include 'writer-navbar.html.twig' %}
+{% endblock %}
+
+{% block content %}
 <div class="container">
 
 	<div class="row">
@@ -20,6 +23,9 @@
 			{% if flash.hasMessages(constant(namespace~'FlashMessages::SUCCESS')) %}
 				{{ flash.display(constant(namespace~'FlashMessages::SUCCESS')) }}
 			{% endif %}
+			{% if flash.hasErrors() %}
+	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
+	 		{% endif %}
 		</div>
 	</div>
 
@@ -38,7 +44,7 @@
 			<ul class="dropdown-menu" aria-labelledby="contact-list">
 				{% if contacts | length > 0 %}
 					{% for contact in contacts %}
-							<li data-id="{{ contact.id }}">{{ contact.name | title }}</li>
+							<li data-contact-id="{{ contact.id }}">{{ contact.name | title }}</li>
 					{% endfor %}
 				{% else %}
 					<li>No Contacts</li>
@@ -47,42 +53,23 @@
 
 		</div>
 
-		<form action="" id="letter-form">
+		<form id="letter-form" action="../letter/create.php" method="POST">
 
-			<textarea name="" id="letter" cols="30" rows="10" class="form-control"></textarea>
+		  <textarea id="letter" name="letter"></textarea>
 
-			<input class="btn btn-primary submit" type="submit" value="Submit Letter">
+		  <input id="contact_id" type="hidden" name="contact_id" value="">
+
+		  <input id="letter_id" type="hidden" name="letter_id" value="">
+
+		  <input id="action" type="hidden" name="action" value="">
+
+		  <button id="letter-save" type="button" onclick="submitLetter('save')" class="letter-btn btn btn-primary">Save Letter</button>
+
+		  <button id="letter-delete" type="button" onclick="submitLetter('delete')" class="letter-btn btn btn-primary">Delete Letter</button>
+
+		  <button id="letter-send" type="button" onclick="submitLetter('send')" class="letter-btn btn btn-primary">Send Letter</button>
 
 		</form>
-
-	</div>
-
-	<hr class="hr">
-	
-	<div class="incoming-letters">
-
-		<h2 class="recieved-letters">Recieved Letters</h2>
-			
-			
-		<div class="date-input-group">
-			<label for="start-date">Start Date: </label>
-			<input id="start-date" type="text" class="date-select datepicker">
-		</div>
-	
-		<div class="date-input-group">
-			<label for="end-date">End Date: </label>
-			<input id="end-date" type="text" class="date-select datepicker">
-		</div>
-
-
-		<button id="date-filter" type="button" class="btn btn-primary btn-sm">
-			Filter Letters
-		</button>
-
-		<div class="letters-container">
-			
-
-		</div>
 
 	</div>
 
@@ -90,25 +77,87 @@
 {% endblock %}
 
 {% block javascript %}
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
-	$( function() {
-		$( ".datepicker" ).datepicker({dateFormat: 'mm-dd-yy'});
-	} );
+tinymce.init({
+	selector: "textarea",
+	menubar: false, 
+	height : "250", 
+	plugins: "noneditable",
+  	noneditable_noneditable_class: "mceNonEditable",
+	setup : function(ed)
+	{
+	    ed.on('init', function() 
+	    {
+	        this.getDoc().body.style.fontSize = '15px';
+	    });
+	}
+});
 </script>
-
 <script type="text/javascript">
-	
 $(document).ready(function() {
 
 	$("ul.dropdown-menu li").click(function() {
 
-		if ($(this).text() !== "No Contacts") {
-			$("#contact-list").text($(this).text()).append(" <span class='caret'></span>");
+		var $self = $(this);
+		var $letterAddress = $("#letter-address");
+		var contactId = $self.data('contact-id');
+		var contactName = $self.text();
+
+		$.get("../app/Helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
+
+			editor = tinyMCE.get('letter');
+
+			editor.dom.remove(editor.dom.select('section'));
+
+			letter = editor.getContent();
+
+			editor.setContent(data + letter);
+
+			if (letter === "") {
+				editor.dom.add(editor.getBody(), 'p', {}, '<br>');
+			}
+			
+			editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'font-size', '16px');
+			editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'margin-bottom', '50px');
+			
+			editor.selection.select(editor.getBody(), true);
+			editor.selection.collapse(false);
+			editor.focus();
+
+	    });
+
+		if (contactName !== "No Contacts") {
+			$("#contact-list").text(contactName).append(" <span class='caret'></span>");
+
+			$("#contact_id").val(contactId);
 		}
 
 	});
 
-});
+	function checkForContact()
+	{
+		contactId = $("#contact_id").val();
 
+		if (!contactId > 0) {
+			alert("You must select a contact");
+			return false;
+		}
+
+		return true;
+	}
+
+	submitLetter = function(action)
+	{
+		var actionInput = $("#action");
+
+		actionInput.val(action);
+
+		if (!checkForContact) return; 
+
+		$("#letter-form").submit();
+	}
+
+});
 </script>
 {% endblock %}

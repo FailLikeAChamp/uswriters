@@ -7,6 +7,7 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 ActiveRecord\Config::initialize(function($config)
 {
+	global $dbpw;
 	$config->set_connections([
 		"development" => "mysql://root:root@localhost/uswriters"
 	]);

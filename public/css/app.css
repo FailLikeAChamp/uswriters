@@ -7,24 +7,6 @@ div.navbar-header > a.navbar-brand {
 	color: #900;
 }
 
-.letter-form-header {
-	margin-top: 10px;
-}
-
-.contact-list-toggle {
-	font-size: 14px;
-	margin: 10px auto;
-}
-
-.dropdown-menu {
-	margin-top: -10px;
-	width: 100%;
-}
-
-#contact-list {
-	min-width: 200px;
-}
-
 ul.dropdown-menu li {
 	padding: 5px;
 }
@@ -42,84 +24,7 @@ hr {
 	border-color: #337ab7;
 }
 
-textarea {
-	resize: none;
-}
-
-/*INCOMING LETTERS*/
-
-.recieved-letters {
-	margin-bottom: 15px;
-}
-
-.date-input-group > label {
-	display: block;
-}
-
-.date-input-group > input {
-	border: 1px solid #b2b2b2;
-	border-radius: 2px;
-	padding-left: 5px;
-	width: 100px;
-}
-
-.date-input-group > input:hover {
-	border-color: #337ab7;
-}
-
-.date-input-group {
-	display: inline-block;
-	margin-bottom: 15px;
-}
-
-.incoming-letters {
-	margin-top: 50px;
-}
-
-.letters-container {
-	background-color: #ffffff;
-	border: 1px solid #cccccc;
-	clear: both;
-	height: 200px;
-	margin-top: 15px;
-	width: 100%;
-}
-
 /* alerts */
 div.dismissable:hover {
 	cursor: pointer;
-}
-
-/* Screen width wider than 475px */
-@media screen and (min-width: 480px) {
-    
-    .letter-form-header {
-		display: inline-block;
-	}
-
-	.dropdown {
-		display: inline-block;
-		float: right;
-	}
-
-	/* INCOMING LETTERS */
-
-	.recieved-letters {
-		float: left;
-	}
-
-	.date-input-group {
-		float: right;
-	}
-
-	button#date-filter {
-		clear: both;
-		float: right;
-		margin-bottom: 15px;
-	}
-
-	.date-input-group:nth-child(2) {
-		margin-left: 10px;
-	}
-
 }

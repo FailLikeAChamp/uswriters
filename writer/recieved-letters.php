@@ -13,7 +13,7 @@ foreach ($writer->contacts as $contact) {
 	$contacts[] = $contact;
 }
 
-echo $twig->render('@writer/home.html.twig', array(
+echo $twig->render('@writer/recieved-letters.html.twig', array(
 		'contacts' => $contacts, 
 		'flash' => $flash, 
 		'username' => $_SESSION['writer_name']

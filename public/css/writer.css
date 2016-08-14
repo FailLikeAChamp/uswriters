@@ -1,17 +1,49 @@
-button#submit {
-	margin: 30px auto;
+#letter-form {
+	clear: both;
 }
 
-a.logout {
-	float: right;
-	margin-top: -20px;
-	margin-right: 20px;
+#prison-address-wrap {
+	display: none;
 }
 
-form#name {
-	margin-bottom: 15px;
+.letter-form-header {
+	margin-top: 10px;
+	text-align: center;
 }
 
-form#name label {
-	display: block;
+.contact-list-toggle {
+	font-size: 14px;
+	margin: 10px auto;
+}
+
+.dropdown {
+	text-align: center;
+}
+
+.dropdown-menu {
+	margin-top: -10px;
+	width: 100%;
+}
+
+#contact-list {
+	min-width: 200px;
+}
+
+.letter-btn {
+	margin-top: 10px;
+}
+
+/* Screen width wider than 475px */
+@media screen and (min-width: 480px) {
+    
+/*    .letter-form-header {
+		display: inline-block;
+	}*/
+
+/*	.dropdown {
+		display: block;
+		float: right;
+	}*/
+
+
 }
