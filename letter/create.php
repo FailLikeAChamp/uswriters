@@ -10,11 +10,13 @@ $document = filter_input(INPUT_POST, 'letter', FILTER_SANITIZE_FULL_SPECIAL_CHAR
 $contact_id = filter_input(INPUT_POST, 'contact_id', FILTER_SANITIZE_NUMBER_INT);
 $letter_id = filter_input(INPUT_POST, 'letter_id', FILTER_SANITIZE_NUMBER_INT);
 $writer_id = (int)$_SESSION['writer_id'];
+$date = Date('Y-m-d H:i:s');
+if (isset($_SESSION['letter'])) unset($_SESSION['letter']);
 
 
 try {
 	$letter = Letter::find($letter_id);
-} catch (Exception $e) {
+} catch (ActiveRecord\RecordNotFound $e) {
 	$letter = new Letter();
 	$letter->contact_id = $contact_id;
 	$letter->writer_id = $writer_id;
@@ -23,6 +25,8 @@ try {
 
 if ($action == "delete") {
 	$letter->status = "deleted";
+	$letter->saved_date = $date;
+	$letter->save();
 	$flash->warning('Your letter has been deleted!', '../writer/home');
 	exit();
 }
@@ -32,18 +36,28 @@ $letter->document = $document;
 
 
 if ($action == "save") {
-	$letter->status = "pending";
+	$letter->status = "saved";
+	$letter->saved_date = $date;
+	$letter->submitted_date = null;
 	$letter->save();
-	if ($letter->is_valid()) $flash->success('Your letter has been saved!', '../writer/home');
-	exit();
+	if ($letter->is_valid()) {
+		$flash->success('Your letter has been saved!', '../writer/home');
+		exit();
+	}
 }
 
 
-if ($action == "send") {
-	$letter->status = "ready";
-	if ($letter->is_valid()) $flash->success('Your letter is waiting to be sent!', '../writer/home');
-	exit();
+if ($action == "submit") {
+	$letter->status = "submitted";
+	$letter->saved_date = $date;
+	$letter->submitted_date = $date;
+	$letter->save();
+	if ($letter->is_valid()) {
+		$flash->success('Your letter has been submitted!', '../writer/home');
+		exit();
+	}
 }
 
-	
-$flash->error("Error: {$letter->errors->on('contact_id')}", '../writer/home');
+$_SESSION['letter'] = $document;
+
+$flash->error("Server Error: If this problem persists, please contact an administrator.", '../writer/home');

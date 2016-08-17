@@ -5,8 +5,8 @@ use \UsWriters\Models\Writers2contact;
 
 isAdminLoggedOut();
 
-$writer_id = $_POST['writer_id'];
-$contact_id = $_POST['contact_id'];
+$writer_id = filter_input(INPUT_POST, 'writer_id', FILTER_SANITIZE_NUMBER_INT);
+$contact_id = filter_input(INPUT_POST, 'contact_id', FILTER_SANITIZE_NUMBER_INT);
 
 $writer2contact = Writers2contact::exists(array('conditions' => array('writer_id = ? and contact_id = ?', $writer_id, $contact_id)));
 

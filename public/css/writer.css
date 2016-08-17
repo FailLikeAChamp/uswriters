@@ -36,14 +36,14 @@
 /* Screen width wider than 475px */
 @media screen and (min-width: 480px) {
     
-/*    .letter-form-header {
+    .letter-form-header {
 		display: inline-block;
-	}*/
+	}
 
-/*	.dropdown {
+	.dropdown {
 		display: block;
 		float: right;
-	}*/
+	}
 
 
 }

@@ -16,7 +16,7 @@ ul.dropdown-menu li {
 	cursor: pointer;
 }
 
-.submit {
+.submit, #submit {
 	margin-top: 15px;
 }
 

@@ -24,11 +24,15 @@ class Contact extends Model
 		$prison_city = $this->prison->city;
 		$prison_state = $this->prison->state;
 		$prison_postal_code = $this->prison->postal_code;
+		$name = $this->name . " " . $prisoner_number;
 
 		$address = "
 			<section id='address' class='mceNonEditable'>
 				<div>
-					{$prisoner_number}
+					{$name}
+				</div>
+				<div>
+					{$prison_name}
 				</div>
 				<div>
 					{$prison_address}
@@ -40,5 +44,4 @@ class Contact extends Model
 
 		return trim(preg_replace('/\t+/', '', $address));
 	}
-	
 }

@@ -5,7 +5,13 @@ use \UsWriters\Models\Prison;
 
 isAdminLoggedOut();
 
-$prison = Prison::find($_POST['id']);
+$prison_id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+try {
+	$prison = Prison::find($prison_id);
+} catch(ActiveRecord\RecordNotFound $e) {
+	$flash->error("No prison found with id '{$prison_id}'", 'edit');
+}
 
 $prison->update_attributes($_POST);
 

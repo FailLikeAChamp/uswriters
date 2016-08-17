@@ -55,19 +55,21 @@ Home
 
 		<form id="letter-form" action="../letter/create.php" method="POST">
 
-		  <textarea id="letter" name="letter"></textarea>
+			<textarea id="letter" name="letter"></textarea>
 
-		  <input id="contact_id" type="hidden" name="contact_id" value="">
+			<input id="contact_id" type="hidden" name="contact_id" value="">
 
-		  <input id="letter_id" type="hidden" name="letter_id" value="">
+			<input id="letter_id" type="hidden" name="letter_id" value="">
 
-		  <input id="action" type="hidden" name="action" value="">
+			<input id="action" type="hidden" name="action" value="">
 
-		  <button id="letter-save" type="button" onclick="submitLetter('save')" class="letter-btn btn btn-primary">Save Letter</button>
+			<button id="letter-save" type="button" onclick="submitLetter('save')" class="letter-btn btn btn-primary">Save Letter</button>
 
-		  <button id="letter-delete" type="button" onclick="submitLetter('delete')" class="letter-btn btn btn-primary">Delete Letter</button>
-
-		  <button id="letter-send" type="button" onclick="submitLetter('send')" class="letter-btn btn btn-primary">Send Letter</button>
+			{% if letterId > 0 %}
+			<button id="letter-delete" type="button" onclick="submitLetter('delete')" class="letter-btn btn btn-primary">Delete Letter</button>
+			{% endif %}
+			
+			<button id="letter-send" type="button" onclick="submitLetter('submit')" class="letter-btn btn btn-primary">Send Letter</button>
 
 		</form>
 
@@ -104,28 +106,30 @@ $(document).ready(function() {
 		var contactId = $self.data('contact-id');
 		var contactName = $self.text();
 
-		$.get("../app/Helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
+		if (contactId > 0) {
+			$.get("../app/Helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
 
-			editor = tinyMCE.get('letter');
+				editor = tinyMCE.get('letter');
 
-			editor.dom.remove(editor.dom.select('section'));
+				editor.dom.remove(editor.dom.select('section'));
 
-			letter = editor.getContent();
+				letter = editor.getContent();
 
-			editor.setContent(data + letter);
+				editor.setContent(data + letter);
 
-			if (letter === "") {
-				editor.dom.add(editor.getBody(), 'p', {}, '<br>');
-			}
-			
-			editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'font-size', '16px');
-			editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'margin-bottom', '50px');
-			
-			editor.selection.select(editor.getBody(), true);
-			editor.selection.collapse(false);
-			editor.focus();
+				if (letter === "") {
+					editor.dom.add(editor.getBody(), 'p', {}, '<br>');
+				}
+				
+				editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'font-size', '16px');
+				editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'margin-bottom', '50px');
+				
+				editor.selection.select(editor.getBody(), true);
+				editor.selection.collapse(false);
+				editor.focus();
 
-	    });
+		    });
+		}
 
 		if (contactName !== "No Contacts") {
 			$("#contact-list").text(contactName).append(" <span class='caret'></span>");
@@ -139,8 +143,7 @@ $(document).ready(function() {
 	{
 		contactId = $("#contact_id").val();
 
-		if (!contactId > 0) {
-			alert("You must select a contact");
+		if (contactId === "") {
 			return false;
 		}
 
@@ -153,9 +156,12 @@ $(document).ready(function() {
 
 		actionInput.val(action);
 
-		if (!checkForContact) return; 
+		if (checkForContact()) {
+			$("#letter-form").submit();
+			return;
+		}
 
-		$("#letter-form").submit();
+		alert("You must select a contact");
 	}
 
 });

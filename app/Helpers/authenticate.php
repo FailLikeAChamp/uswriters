@@ -32,7 +32,8 @@ function authenticateWriter($email, $password)
 		$_SESSION['writer_id'] = $writer->id;
 		$_SESSION['writer_name'] = $writer->name;
 		$name = ucwords($writer->name);
-		$flash->success("Welcome, {$name}", "/uswriters/writer/home");
+		header("location: /uswriters/writer/home");
+		// $flash->info("Welcome, {$name}", "/uswriters/writer/home");
 		exit();
 	}
 

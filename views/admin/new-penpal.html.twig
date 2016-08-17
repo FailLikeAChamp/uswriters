@@ -6,10 +6,6 @@
 Admin | Assign PenPal
 {% endblock %}
 
-{% block css %}
-<link rel="stylesheet" href="../public/css/writer.css">
-{% endblock %}
-
 {% block navbar %}
 {% include 'admin-navbar.html.twig' %}
 {% endblock %}
@@ -61,7 +57,7 @@ Admin | Assign PenPal
 				{% endfor %}
 			</select>
 
-			<button id="submit" type="submit" class="btn btn-primary">Assign PenPal</button>
+			<button id="submit" type="submit" class="btn btn-primary submit">Assign PenPal</button>
 
 		</form>
 	

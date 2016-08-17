@@ -19,4 +19,19 @@ class Letter extends Model
     	array('writer_id', 'in' => array(0), 'message' => 'No writer was found!'),
 		array('contact_id', 'in' => array(0), 'message' => 'No contact was selected!')
    );
+    
+   public function getContactName() 
+   {
+        return $this->contact->name;
+   }
+
+   public function getWriterName() 
+   {
+        return $this->writer->name;
+   }
+
+   public function getPrintVersion() 
+   {
+        return html_entity_decode($this->document);
+   }
 }
