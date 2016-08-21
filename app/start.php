@@ -7,11 +7,13 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 ActiveRecord\Config::initialize(function($config)
 {
-	global $dbpw;
+	$configs = getDbConfigs();
+	$dbConfigs = $configs['database'];
+
 	$config->set_connections([
-		"development" => "mysql://root:root@localhost/uswriters"
+		"production" => "mysql://".$dbConfigs['username'].":".$dbConfigs['password']."@".$dbConfigs['connection']
 	]);
-	$config->set_default_connection('development');
+	$config->set_default_connection('production');
 });
 
 $loader = new Twig_Loader_Filesystem();
@@ -23,8 +25,6 @@ $twig = new Twig_Environment($loader, array(
     'cache' => false,
 ));
 
-$root = "/uswriters";
-
-$twig->addGlobal('root', $root);
+$twig->addGlobal('root', '/uswriters');
 
 $flash = new FlashMessages();
