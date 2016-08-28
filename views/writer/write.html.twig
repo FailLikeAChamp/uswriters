@@ -3,7 +3,7 @@
 {% extends "layout.html.twig" %}
 
 {% block title %}
-Home
+Write Letters
 {%  endblock %}
 
 {% block css %}
@@ -83,14 +83,15 @@ Home
 {% endblock %}
 
 {% block javascript %}
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script src="../public/js/libs/tinymce.min.js"></script>
 <script>
 tinymce.init({
 	selector: "textarea",
 	menubar: false, 
 	height : "250", 
-	plugins: "noneditable",
+	plugins: "noneditable nonbreaking",
   	noneditable_noneditable_class: "mceNonEditable",
+  	nonbreaking_force_tab: true, 
 	setup : function(ed)
 	{
 	    ed.on('init', function() 
@@ -103,11 +104,11 @@ tinymce.init({
 <script type="text/javascript">
 
 document.body.onload = function() {
-	var letterId = $("#letter_id").val();
+	const letterId = $("#letter_id").val();
 
 	if (letterId !== "") {
 		
-		$.get("../app/Helpers/getLetter.php?letter_id="+letterId, function(data, status) {
+		$.get("../app/helpers/getLetter.php?letter_id="+letterId, function(data, status) {
 			if (data !== "error") {
 				editor = tinyMCE.get('letter');
 				editor.setContent(data);
@@ -121,17 +122,15 @@ document.body.onload = function() {
 
 $(document).ready(function() {
 
-
-
 	$("ul.dropdown-menu li").click(function() {
 
-		var $self = $(this);
-		var $letterAddress = $("#letter-address");
-		var contactId = $self.data('contact-id');
-		var contactName = $self.text();
+		const $self = $(this);
+		const $letterAddress = $("#letter-address");
+		const contactId = $self.data('contact-id');
+		const contactName = $self.text();
 
 		if (contactId > 0) {
-			$.get("../app/Helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
+			$.get("../app/helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
 
 				editor = tinyMCE.get('letter');
 
@@ -176,7 +175,7 @@ $(document).ready(function() {
 
 	submitLetter = function(action)
 	{
-		var actionInput = $("#action");
+		const actionInput = $("#action");
 
 		actionInput.val(action);
 

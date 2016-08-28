@@ -3,7 +3,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-Admin Login
+Admin | Login
 {% endblock %}
 
 {% block css %}
@@ -28,19 +28,19 @@ Admin Login
 		<button id="submit-btn" class="btn btn-lg btn-primary btn-block login-submit" type="submit">Sign in</button>
 
 		<div class="row">
+
 			<div class="col-md-12">
+
 		 		{% if flash.hasErrors() %}
 		 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
 		 		{% endif %}
+
 		 	</div>
+
 	 	</div>
 
 	</form>
 
-</div> <!-- /container -->
-
-<div class="container">
-	
 	<div class="row">
 		
 		<div class="col-xs-12">
@@ -51,5 +51,5 @@ Admin Login
 
 	</div>
 
-</div>
+</div> <!-- /container -->
 {% endblock %}

@@ -9,4 +9,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 isAdminLoggedOut();
 
-echo $twig->render('@admin/home.html.twig', array('flash' => $flash, 'username' => $_SESSION['admin_username']));
+echo $twig->render('@admin/home.html.twig', array(
+	'flash' => $flash, 
+	'username' => $_SESSION['admin_username']
+));

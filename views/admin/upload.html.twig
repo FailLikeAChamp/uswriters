@@ -1,43 +1,70 @@
 {% extends 'layout.html.twig' %}
 
+{% block title %}
+Admin | Upload
+{% endblock %}
+
 {% block css %}
-<link rel="stylesheet" href="../public/css/writer.css">
+<link rel="stylesheet" href="../public/css/admin/upload.css">
+{% endblock %}
+
+{% block navbar %}
+{% include 'admin-navbar.html.twig' %}
 {% endblock %}
 
 {% block content %}
 <div class="container">
+
 	<div class="row">
-		<div class="col-md-6 col-md-offset-2">
+
+		<div class="col-xs-12">
+
 			<form method="POST" action="letter-upload.php" enctype="multipart/form-data">
+
 			  <input name="filesToUpload[]" id="filesToUpload" type="file" multiple="" onchange="makeFileList()" />
+
 			</form>
-			<p><strong>Files you selected:</strong></p>
+
+			<p>
+				<strong>Files you selected:</strong>
+			</p>
+
 			<ul id="fileList">
-				<li id="first-list-item">No Files Selected</li>
+
+				<li>No Files Selected</li>
+
 			</ul>
+
 		</div>
+
 	</div>
+
 </div>
 {% endblock %}
 
 {% block javascript %}
 <script type="text/javascript">
 function makeFileList() {
-	var input = document.getElementById("filesToUpload");
-	var ul = document.getElementById("fileList");
+
+	const input = document.getElementById("filesToUpload");
+	const ul = document.getElementById("fileList");
+
 	while (ul.hasChildNodes()) {
 		ul.removeChild(ul.firstChild);
 	}
-	for (var i = 0; i < input.files.length; i++) {
-		var li = document.createElement("li");
+
+	for (let i = 0; i < input.files.length; i++) {
+		const li = document.createElement("li");
 		li.innerHTML = input.files[i].name;
 		ul.appendChild(li);
 	}
+
 	if(!ul.hasChildNodes()) {
-		var li = document.createElement("li");
+		const li = document.createElement("li");
 		li.innerHTML = 'No Files Selected';
 		ul.appendChild(li);
 	}
+
 }
 </script>
 {% endblock %}
