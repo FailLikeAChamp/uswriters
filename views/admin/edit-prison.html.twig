@@ -19,12 +19,9 @@ Admin | Edit Prison
 
 	<div class="row">
 		<div class="col-sm-6 col-sm-offset-2">
-			{% if flash.hasMessages(constant(namespace~'FlashMessages::SUCCESS')) %}
-				{{ flash.display(constant(namespace~'FlashMessages::SUCCESS')) }}
+			{% if flash.hasMessages() %}
+				{{ flash.display() }}
 			{% endif %}
-			{% if flash.hasErrors() %}
-	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
-	 		{% endif %}
 		</div>
 	</div>
 

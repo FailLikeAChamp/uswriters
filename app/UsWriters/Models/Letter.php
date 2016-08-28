@@ -25,12 +25,17 @@ class Letter extends Model
         return $this->contact->name;
    }
 
+   public function getContactId() 
+   {
+        return $this->contact->id; 
+   }
+
    public function getWriterName() 
    {
         return $this->writer->name;
    }
 
-   public function getPrintVersion() 
+   public function getHtmlVersion() 
    {
         return html_entity_decode($this->document);
    }

@@ -1,0 +1,26 @@
+.panel-primary {
+	padding: 0;
+}
+
+.panel-heading {
+	font-size: 2rem;
+}
+
+.list-group-item:hover {
+	background-color: #d9edf7;
+	cursor: pointer;
+}
+
+.non-pointer:hover {
+	background-color: inherit;
+	cursor: default;
+}
+
+
+@media (min-width: 768px) {
+
+	.section {
+		padding: 0px 5px;
+	}
+
+}

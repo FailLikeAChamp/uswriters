@@ -7,7 +7,7 @@ Recieved Letters
 {%  endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="../public/css/recieved-letters.css">
+<link rel="stylesheet" href="../public/css/writer/read.css">
 {% endblock %}
 
 
@@ -20,12 +20,9 @@ Recieved Letters
 
 	<div class="row">
 		<div class="col-md-12">
-			{% if flash.hasMessages(constant(namespace~'FlashMessages::SUCCESS')) %}
-				{{ flash.display(constant(namespace~'FlashMessages::SUCCESS')) }}
+			{% if flash.hasMessages() %}
+				{{ flash.display() }}
 			{% endif %}
-			{% if flash.hasErrors() %}
-	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
-	 		{% endif %}
 		</div>
 	</div>
 

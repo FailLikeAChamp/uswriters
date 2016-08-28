@@ -7,7 +7,7 @@ Home
 {%  endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="../public/css/writer.css">
+<link rel="stylesheet" href="../public/css/writer/home.css">
 {% endblock %}
 
 
@@ -20,58 +20,71 @@ Home
 
 	<div class="row">
 		<div class="col-md-12">
-			{% if flash.hasMessages(constant(namespace~'FlashMessages::SUCCESS')) %}
-				{{ flash.display(constant(namespace~'FlashMessages::SUCCESS')) }}
+			{% if flash.hasMessages() %}
+				{{ flash.display() }}
 			{% endif %}
-			{% if flash.hasErrors() %}
-	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
-	 		{% endif %}
 		</div>
 	</div>
 
-	<div class="write-letter-container">
+	<div class="container">
+		
+		<div class="row">
 
-		<h2 class="letter-form-header">Write a letter</h2>
+			<div class="col-sm-4 section"> 
 
-		<div class="dropdown">
+				<div class="panel panel-primary">
 
-			<button id="contact-list" type="button" class="contact-list-toggle btn btn-primary" 
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Select A Contact
-				<span class="caret"></span>
-			</button>
+					<div class="panel-heading">Saved Drafts</div>
 
-			<ul class="dropdown-menu" aria-labelledby="contact-list">
-				{% if contacts | length > 0 %}
-					{% for contact in contacts %}
-							<li data-contact-id="{{ contact.id }}">{{ contact.name | title }}</li>
-					{% endfor %}
-				{% else %}
-					<li>No Contacts</li>
-				{% endif %}
-			</ul>
+					<ul class="list-group">
+					{% if drafts | length > 0 %}
+						{% for draft in drafts %}
+							<li class="list-group-item" data-letter-id="{{ draft.id }}">{{ draft.name | title }} - {{ draft.saved_date | date("m/d/y") }}</li>
+						{% endfor %}
+					{% else %}
+						<li class="list-group-item non-pointer">No Drafts Found</li>
+					{% endif %}
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="col-sm-4 section">
+
+				<div class="panel panel-primary">
+
+					<div class="panel-heading">Unread Letters</div>
+
+					<ul class="list-group">
+					{% if unreadLetters | length > 0 %}
+					{% else %}
+						<li class="list-group-item non-pointer">No Unread Letters</li>
+					{% endif %}
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="col-sm-4 section">
+
+				<div class="panel panel-primary">
+
+					<div class="panel-heading">Recent Letters</div>
+
+					<ul class="list-group">
+					{% if recentLetters | length > 0 %}
+					{% else %}
+						<li class="list-group-item non-pointer">No Recent Letters</li>
+					{% endif %}
+					</ul>
+
+				</div>
+
+			</div>
 
 		</div>
-
-		<form id="letter-form" action="../letter/create.php" method="POST">
-
-			<textarea id="letter" name="letter"></textarea>
-
-			<input id="contact_id" type="hidden" name="contact_id" value="">
-
-			<input id="letter_id" type="hidden" name="letter_id" value="">
-
-			<input id="action" type="hidden" name="action" value="">
-
-			<button id="letter-save" type="button" onclick="submitLetter('save')" class="letter-btn btn btn-primary">Save Letter</button>
-
-			{% if letterId > 0 %}
-			<button id="letter-delete" type="button" onclick="submitLetter('delete')" class="letter-btn btn btn-primary">Delete Letter</button>
-			{% endif %}
-			
-			<button id="letter-send" type="button" onclick="submitLetter('submit')" class="letter-btn btn btn-primary">Send Letter</button>
-
-		</form>
 
 	</div>
 
@@ -79,91 +92,15 @@ Home
 {% endblock %}
 
 {% block javascript %}
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
-tinymce.init({
-	selector: "textarea",
-	menubar: false, 
-	height : "250", 
-	plugins: "noneditable",
-  	noneditable_noneditable_class: "mceNonEditable",
-	setup : function(ed)
-	{
-	    ed.on('init', function() 
-	    {
-	        this.getDoc().body.style.fontSize = '15px';
-	    });
-	}
-});
-</script>
-<script type="text/javascript">
-$(document).ready(function() {
+	$(document).ready(function()  {
 
-	$("ul.dropdown-menu li").click(function() {
+		$("#drafts li").click(function() {
+			const letterId = $(this).data("letter-id");
 
-		var $self = $(this);
-		var $letterAddress = $("#letter-address");
-		var contactId = $self.data('contact-id');
-		var contactName = $self.text();
-
-		if (contactId > 0) {
-			$.get("../app/Helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
-
-				editor = tinyMCE.get('letter');
-
-				editor.dom.remove(editor.dom.select('section'));
-
-				letter = editor.getContent();
-
-				editor.setContent(data + letter);
-
-				if (letter === "") {
-					editor.dom.add(editor.getBody(), 'p', {}, '<br>');
-				}
-				
-				editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'font-size', '16px');
-				editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'margin-bottom', '50px');
-				
-				editor.selection.select(editor.getBody(), true);
-				editor.selection.collapse(false);
-				editor.focus();
-
-		    });
-		}
-
-		if (contactName !== "No Contacts") {
-			$("#contact-list").text(contactName).append(" <span class='caret'></span>");
-
-			$("#contact_id").val(contactId);
-		}
+			window.location.assign("/uswriters/writer/write.php?letter_id="+letterId);
+		});
 
 	});
-
-	function checkForContact()
-	{
-		contactId = $("#contact_id").val();
-
-		if (contactId === "") {
-			return false;
-		}
-
-		return true;
-	}
-
-	submitLetter = function(action)
-	{
-		var actionInput = $("#action");
-
-		actionInput.val(action);
-
-		if (checkForContact()) {
-			$("#letter-form").submit();
-			return;
-		}
-
-		alert("You must select a contact");
-	}
-
-});
 </script>
 {% endblock %}

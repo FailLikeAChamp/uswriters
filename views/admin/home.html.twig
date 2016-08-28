@@ -19,8 +19,8 @@ Admin | Home
 
 	<div class="row">
 		<div class="col-md-4 col-md-offset-2">
-			{% if flash.hasMessages(constant(namespace~'FlashMessages::SUCCESS')) %}
-				{{ flash.display(constant(namespace~'FlashMessages::SUCCESS')) }}
+			{% if flash.hasMessages() %}
+				{{ flash.display() }}
 			{% endif %}
 		</div>
 	</div>

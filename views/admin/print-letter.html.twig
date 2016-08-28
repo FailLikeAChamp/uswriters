@@ -1,19 +1,19 @@
 {% extends 'layout.html.twig' %}
 
 {% block css %}
-<link rel="stylesheet" href="../public/css/print.css">
+<link rel="stylesheet" href="../public/css/admin/print.css">
 {% endblock %}
 
 {% block content %}
 <div class="letter-wrap">
-	{{ letter.getPrintVersion | raw }}
+	{{ letter.getHtmlVersion | raw }}
 
 </div>
 {% endblock %}
 
 {% block javascript %}
 <script>
-window.onload = function() { 
+document.body.onload = function() { 
 	window.print(); 
 }
 </script>

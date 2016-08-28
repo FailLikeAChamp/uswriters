@@ -52,4 +52,30 @@ class Writer extends Model
 		$this->phone = preg_replace("/[^0-9]/", "", $this->phone);
 
 	}
+
+	public function getDrafts() 
+	{
+		$drafts = Writer::find_by_sql("
+			SELECT 
+				letters.id as id, 
+				letters.status as status, 
+				letters.saved_date as saved_date, 
+				contacts.name as name 
+			FROM letters 
+			LEFT JOIN contacts 
+			ON contacts.id = letters.contact_id 
+			WHERE letters.writer_id = $this->id 
+			AND letters.status = 'saved' 
+			ORDER BY letters.saved_date ASC
+		");
+
+		return $drafts;
+	}
+
+	public function getUnreadLetters() 
+	{
+		$unreadLetters = array();
+
+		return $unreadLetters;
+	}
 }

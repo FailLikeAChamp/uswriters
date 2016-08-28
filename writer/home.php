@@ -7,14 +7,13 @@ isWriterLoggedOut();
 
 $writer = Writer::find($_SESSION['writer_id']);
 
-$contacts = array();
+$drafts = $writer->getDrafts();
 
-foreach ($writer->contacts as $contact) {
-	$contacts[] = $contact;
-}
+$unreadLetters = $writer->getUnreadLetters();
 
 echo $twig->render('@writer/home.html.twig', array(
-		'contacts' => $contacts, 
+		'drafts' => $drafts,
+		'unreadLetters' => $unreadLetters,
 		'flash' => $flash, 
 		'username' => $_SESSION['writer_name']
 ));
