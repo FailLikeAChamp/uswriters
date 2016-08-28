@@ -132,7 +132,7 @@ $(document).ready(function() {
 		if (contactId > 0) {
 			$.get("../app/helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
 
-				editor = tinyMCE.get('letter');
+				const editor = tinyMCE.get('letter');
 
 				editor.dom.remove(editor.dom.select('section'));
 
@@ -175,6 +175,11 @@ $(document).ready(function() {
 
 	submitLetter = function(action)
 	{
+		if (action !== 'delete' && letterIsBlank()) {
+			alert("Cannot save a blank letter");
+			return;
+		}
+
 		const actionInput = $("#action");
 
 		actionInput.val(action);
@@ -187,11 +192,20 @@ $(document).ready(function() {
 		alert("You must select a contact");
 	}
 
-	deleteLetter = function ()
+	deleteLetter = function()
 	{
 		if (confirm("Are you sure you want to delete this letter?")) {
 			submitLetter('delete');
 		}	
+	}
+
+	function letterIsBlank()
+	{
+		const letter = tinyMCE.get('letter').getContent();
+
+		if (!letter.length > 0) return true
+
+		return false;
 	}
 
 });
