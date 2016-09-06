@@ -26,12 +26,6 @@ input:last-child {
     margin-top: 1px;
 }
 
-.admin-login-link {
-    display: block;
-    margin: 30px auto;
-    text-align: center;
-}
-
 .form-signin-heading {
     text-align: center;
 }
