@@ -28,19 +28,21 @@ Home
 		
 	<div class="row">
 
-		<div class="col-sm-4 section"> 
+		<div class="col-sm-6 section"> 
 
 			<div class="panel panel-primary">
 
-				<div class="panel-heading">Saved Drafts</div>
+				<div class="panel-heading">My Letters</div>
 
-				<ul id="drafts" class="list-group">
-				{% if drafts | length > 0 %}
-					{% for draft in drafts %}
-						<li class="list-group-item" data-letter-id="{{ draft.id }}">{{ draft.name | title }} - {{ draft.saved_date | date("m/d/y") }}</li>
+				<ul id="myLetters" class="list-group">
+				{% if myLetters | length > 0 %}
+					{% for letter in myLetters %}
+						<li class="list-group-item {{ letter.status }}" data-letter-id="{{ letter.id }}">
+							{{ letter.name | title }} - {{ letter.saved_date | date("m/d/y") }} <span class="letter-type">{{ letter.getType }}</span>
+						</li>
 					{% endfor %}
 				{% else %}
-					<li class="list-group-item non-pointer">No Drafts Found</li>
+					<li class="list-group-item non-pointer">No Letters Found</li>
 				{% endif %}
 				</ul>
 
@@ -48,16 +50,21 @@ Home
 
 		</div>
 
-		<div class="col-sm-4 section">
+		<div class="col-sm-6 section"> 
 
 			<div class="panel panel-primary">
 
-				<div class="panel-heading">Unread Letters</div>
+				<div class="panel-heading">Contacts Letters</div>
 
-				<ul class="list-group">
-				{% if unreadLetters | length > 0 %}
+				<ul id="contactLetters" class="list-group">
+				{% if contactLetters | length > 0 %}
+					{% for letter in contactLetters %}
+						<li class="list-group-item {{ letter.status }}" data-letter-id="{{ letter.id }}">
+							{{ letter.name | title }} - {{ letter.saved_date | date("m/d/y") }} <span class="letter-type">{{ letter.getType }}</span>
+						</li>
+					{% endfor %}
 				{% else %}
-					<li class="list-group-item non-pointer">No Unread Letters</li>
+					<li class="list-group-item non-pointer">No Letters Found</li>
 				{% endif %}
 				</ul>
 
@@ -65,7 +72,7 @@ Home
 
 		</div>
 
-		<div class="col-sm-4 section">
+		{# <div class="col-sm-6 section">
 
 			<div class="panel panel-primary">
 
@@ -82,6 +89,26 @@ Home
 
 		</div>
 
+		<div class="col-sm-6 section"> 
+
+			<div class="panel panel-primary">
+
+				<div class="panel-heading">Sent Letters</div>
+
+				<ul id="sent" class="list-group">
+				{% if sentLetters | length > 0 %}
+					{% for letter in sentLetters %}
+						<li class="list-group-item" data-letter-id="{{ letter.id }}">{{ letter.name | title }} - {{ letter.submitted_date | date("m/d/y") }}</li>
+					{% endfor %}
+				{% else %}
+					<li class="list-group-item non-pointer">No Sent Letters</li>
+				{% endif %}
+				</ul>
+
+			</div>
+
+		</div> #}
+
 	</div>
 
 </div>
@@ -91,10 +118,14 @@ Home
 <script>
 	$(document).ready(function()  {
 
-		$("#drafts li").click(function() {
-			let letterId = $(this).data("letter-id");
+		$("#myLetters li").click(function() {
+			let $self = $(this);
+			let letterId = $self.data("letter-id");
 
-			window.location.assign("/uswriters/writer/write.php?letter_id="+letterId);
+			if ($self.hasClass("saved")) {
+				window.location.assign("/uswriters/writer/write.php?letter_id="+letterId);
+			}
+
 		});
 
 	});

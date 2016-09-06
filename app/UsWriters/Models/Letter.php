@@ -39,4 +39,27 @@ class Letter extends Model
    {
         return html_entity_decode($this->document);
    }
+
+   public function getType() 
+   {
+        switch ($this->status) {
+            case 'saved':
+                return "Draft";
+                break;
+            case 'submitted':
+                return "Sent";
+                break;
+            case 'submitted':
+                return "Sent";
+                break;
+            case 'sent':
+                return "Mailed";
+                break;
+            case 'deleted':
+                return "Deleted";
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -3,14 +3,8 @@
 	padding: 10px 40px;
 	}
 
-	p {
-		clear: both;
-	}
-
-	#address {
-		float: right;
+	#contact-address {
 		font-size: 16px;
 	    margin-bottom: 50px;
-	    transform: rotate(180deg);
 	}
 }

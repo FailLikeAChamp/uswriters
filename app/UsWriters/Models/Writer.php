@@ -53,9 +53,9 @@ class Writer extends Model
 
 	}
 
-	public function getDrafts() 
+	public function getDraftsAndSentLetters() 
 	{
-		$drafts = Writer::find_by_sql("
+		$drafts = Letter::find_by_sql("
 			SELECT 
 				letters.id as id, 
 				letters.status as status, 
@@ -65,17 +65,49 @@ class Writer extends Model
 			LEFT JOIN contacts 
 			ON contacts.id = letters.contact_id 
 			WHERE letters.writer_id = $this->id 
-			AND letters.status = 'saved' 
-			ORDER BY letters.saved_date ASC
-		");
+			AND letters.status IN('saved', 'submitted')  
+			ORDER BY letters.status DESC, letters.saved_date DESC
+		"); 
 
 		return $drafts;
 	}
 
-	public function getUnreadLetters() 
-	{
-		$unreadLetters = array();
+	// public function getSentLetters()
+	// {
+	// 	$letters = Letter::find_by_sql("
+	// 		SELECT 
+	// 			letters.id as id, 
+	// 			letters.saved_date as saved_date, 
+	// 			letters.status as status, 
+	// 			contacts.name as name 
+	// 		FROM letters 
+	// 		LEFT JOIN contacts 
+	// 		ON contacts.id = letters.contact_id 
+	// 		WHERE letters.writer_id = $this->id 
+	// 		AND letters.status = 'submitted' 
+	// 		ORDER BY letters.saved_date DESC 
+	// 		LIMIT 10
+	// 	");
 
-		return $unreadLetters;
+	// 	return $letters;
+	// }
+
+	public function getUnreadAndReadLetters() 
+	{
+		$letters = Letter::find_by_sql("
+			SELECT 
+				letters.id as id, 
+				letters.status as status, 
+				letters.saved_date as saved_date, 
+				contacts.name as name 
+			FROM letters 
+			LEFT JOIN contacts 
+			ON contacts.id = letters.contact_id 
+			WHERE letters.writer_id = $this->id 
+			AND letters.status IN('unread', 'read') 
+			ORDER BY letters.status DESC, letters.saved_date DESC
+		"); 
+
+		return $letters;
 	}
 }

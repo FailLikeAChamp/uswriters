@@ -15,7 +15,7 @@ Admin | Assign PenPal
 
 	<div class="row">
 
-		<div class="col-sm-6 col-sm-offset-2">
+		<div class="col-sm-6">
 
 			{% if flash.hasErrors() %}
 	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
@@ -27,7 +27,7 @@ Admin | Assign PenPal
 
 	<div class="row">
 
-		<div class="col-sm-6 col-sm-offset-2">
+		<div class="col-sm-6">
 		
 			<h2>Assign a PenPal</h2>
 
@@ -37,7 +37,7 @@ Admin | Assign PenPal
 	
 	</div>
 
-	<div class="form-group col-sm-6 col-sm-offset-2">
+	<div class="form-group col-sm-6">
 
 		<form id="create-contact" class="form-horizontal" method="POST" action="assign-penpal.php">
 
@@ -65,3 +65,26 @@ Admin | Assign PenPal
 
 </div> <!-- /container -->
 {% endblock %}
+
+{% block javascript %}
+<script>
+	$("#create-contact").submit(function(e) {
+		
+		const writerId = $("#writer_id").val();
+		const contactId = $("#contact_id").val();
+
+		if (writerId === "") {
+			e.preventDefault();
+			alert("Must select a writer");
+			return;
+		}
+
+		if (contactId === "") {
+			e.preventDefault();
+			alert("Must select a contact");
+			return;
+		}
+
+	});
+</script>
+{% endblock %}	

@@ -5,8 +5,7 @@ if (!session_id()) session_start();
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-ActiveRecord\Config::initialize(function($config)
-{
+ActiveRecord\Config::initialize(function($config) {
 	$configs = getDbConfigs();
 	$dbConfigs = $configs['database'];
 

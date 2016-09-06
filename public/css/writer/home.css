@@ -7,7 +7,7 @@
 }
 
 .list-group-item:hover {
-	background-color: #d9edf7;
+	background-color: lightyellow;
 	cursor: pointer;
 }
 
@@ -16,11 +16,23 @@
 	cursor: default;
 }
 
+.submitted, .read {
+	color: salmon;
+}
+
+.letter-type {
+	float: right;
+}
+
 
 @media (min-width: 768px) {
 
 	.section {
 		padding: 0px 5px;
+	}
+
+	.panel-heading {
+		text-align: center;
 	}
 
 }
