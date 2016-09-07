@@ -24,6 +24,38 @@
 	float: right;
 }
 
+#closebt-container {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+.closebt {
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.closebt:hover {
+    transform: rotate(90deg);
+}
+
+img {
+    vertical-align: middle;
+}
+
+#letter {
+	display: block;
+	margin: 0px auto;
+	padding: 1rem 5rem;
+	width: 75%;
+}
+
 
 @media (min-width: 768px) {
 

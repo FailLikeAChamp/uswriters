@@ -8,6 +8,7 @@ Home
 
 {% block css %}
 <link rel="stylesheet" href="../public/css/writer/home.css">
+<link rel="stylesheet" href="../public/css/libs/animate.min.css">
 {% endblock %}
 
 
@@ -37,7 +38,7 @@ Home
 				<ul id="myLetters" class="list-group">
 				{% if myLetters | length > 0 %}
 					{% for letter in myLetters %}
-						<li class="list-group-item {{ letter.status }}" data-letter-id="{{ letter.id }}">
+						<li class="list-group-item {{ letter.status }}" data-letter-id="{{ letter.id }}" href="#letterModal">
 							{{ letter.name | title }} - {{ letter.saved_date | date("m/d/y") }} <span class="letter-type">{{ letter.getType }}</span>
 						</li>
 					{% endfor %}
@@ -112,13 +113,28 @@ Home
 	</div>
 
 </div>
+
+{# Letter Modal #}
+<div id="letterModal">
+    <!--"THIS IS IMPORTANT! to close the modal, the class name has to match the name given on the ID-->
+    <div id="closebt-container" class="close-letterModal">
+        <img class="closebt" src="../public/img/closebt.svg">
+    </div>
+    
+    <div id="letter" class="modal-content">
+        <!--Your modal content goes here-->
+    </div>
+</div>
+{# End Letter Modal #}
 {% endblock %}
 
 {% block javascript %}
+<script src="../public/js/libs/animatedModal.js"></script>
 <script>
 	$(document).ready(function()  {
 
-		$("#myLetters li").click(function() {
+		// apply click event to only saved drafts
+		$("#myLetters li.saved").click(function() {
 			let $self = $(this);
 			let letterId = $self.data("letter-id");
 
@@ -127,6 +143,39 @@ Home
 			}
 
 		});
+
+		// apply animatedModalJs to every li with class submitted
+		$("#myLetters li.submitted").each(function(index) {
+
+            $(this).animatedModal({
+                modalTarget:'letterModal',
+                animatedIn:'zoomInUp',
+                animatedOut:'zoomOutDown',
+                animationDuration: '.8s',
+                color:'#3498db', 
+                // Callbacks
+                beforeOpen: function(letterId) {
+                	let $letterModal = $("#letter");
+                	$letterModal.hide();
+                
+                    $.get("../app/helpers/getLetter.php?letter_id="+letterId, function(data, status) {
+                    	if (data === "error") {
+                    		$letterModal.html("<div class='letterError'>Error: Could not retrieve letter from database.</div>");
+                    	} else {
+                    		$letterModal.html(data);
+                    	}
+				    });
+                },
+                afterOpen: function() {
+                    $("#letter").fadeIn(500);
+                },           
+                beforeClose: function() {
+                    $("#letter").hide().html("");
+                }
+            });
+
+
+        });
 
 	});
 </script>
