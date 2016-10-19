@@ -49,14 +49,17 @@ class Letter extends Model
             case 'submitted':
                 return "Sent";
                 break;
-            case 'submitted':
-                return "Sent";
-                break;
             case 'sent':
-                return "Mailed";
+                return "Sent";
                 break;
             case 'deleted':
                 return "Deleted";
+                break;
+            case 'read':
+                return "Read";
+                break;
+            case 'unread':
+                return "Unread";
                 break;
             default:
                 break;

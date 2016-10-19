@@ -6,15 +6,25 @@ use \ActiveRecord\Model;
 class Contact extends Model
 {
 	static $belongs_to = array(
-		array('prison'),
-		array('admin')
+		array('prison')
 	);
 
 	static $has_many = array(
 		array('writers', 'through' => 'writers2contacts'),
 		array('writers2contacts'),
-		array('letters')
+		array('letters'), 
+		array('contact_letters')
 	);
+
+	public function before_destroy()
+    {
+        $related_writers2contacts = writers2contact::find(array(
+            'conditions' => array(
+                'contact_id' => $this->id)
+        ));
+
+        $related_writers2contacts->delete();
+    }
 
 	public function getPrisonHtmlAddress() 
 	{

@@ -6,6 +6,7 @@ use \ActiveRecord\Model;
 class Writer extends Model
 {	
 	static $validates_presence_of = array(
+		array('username', 'message' => 'cannot be blank', 'on' => 'create'),
 		array('name', 'message' => 'cannot be blank', 'on' => 'create'),
 		array('address_1', 'message' => 'cannot be blank', 'on' => 'create'),
 		array('city', 'message' => 'cannot be blank', 'on' => 'create'),
@@ -16,21 +17,33 @@ class Writer extends Model
 		array('gender', 'message' => 'cannot be blank', 'on' => 'create')
 	);
 
-	static $before_create = array('hashPassword', 'lowercaseEmail', 'cleanPhone');
+	static $validates_uniqueness_of = array(
+    	array('username', 'message' => '(PenPal name) is already used'),
+    	array('email', 'message' => 'already used')
+    );
 
-	static $before_save = array('cleanPhone', 'lowercaseEmail');
+	static $before_create = array('hashPassword', 'cleanPhone', 'lowerCaseData');
 
-	static $before_update = array('cleanPhone', 'lowercaseEmail');
+	static $before_save = array('cleanPhone', 'lowerCaseData');
 
-	static $belongs_to = array(
-		array('admin')
-	);
+	static $before_update = array('cleanPhone', 'lowerCaseData');
 
 	static $has_many = array(	
 		array('contacts', 'through' => 'writers2contacts'),
 		array('writers2contacts'),
-		array('letters')
+		array('letters'), 
+		array('contact_letters')
 	);
+
+	public function before_destroy()
+    {
+        $related_writers2contacts = writers2contact::find(array(
+            'conditions' => array(
+                'writer_id' => $this->id)
+        ));
+
+        $related_writers2contacts->delete();
+    }
 
 	public function login($givenPassord) 
 	{
@@ -42,9 +55,10 @@ class Writer extends Model
 		$this->password = password_hash($this->password, PASSWORD_BCRYPT, array('cost' => 10));
 	}
 
-	public function lowercaseEmail() 
-	{
-		$this->email = strtolower($this->email);
+	public function lowerCaseData() 
+	{	
+		$this->email = strtolower(trim($this->email));
+		$this->username = strtolower(trim($this->username));
 	}
 
 	public function cleanPhone()
@@ -53,61 +67,61 @@ class Writer extends Model
 
 	}
 
-	public function getDraftsAndSentLetters() 
+	public function getLetters() 
 	{
-		$drafts = Letter::find_by_sql("
-			SELECT 
-				letters.id as id, 
-				letters.status as status, 
-				letters.saved_date as saved_date, 
-				contacts.name as name 
-			FROM letters 
-			LEFT JOIN contacts 
-			ON contacts.id = letters.contact_id 
-			WHERE letters.writer_id = $this->id 
-			AND letters.status IN('saved', 'submitted')  
-			ORDER BY letters.status DESC, letters.saved_date DESC
-		"); 
-
-		return $drafts;
-	}
-
-	// public function getSentLetters()
-	// {
-	// 	$letters = Letter::find_by_sql("
-	// 		SELECT 
-	// 			letters.id as id, 
-	// 			letters.saved_date as saved_date, 
-	// 			letters.status as status, 
-	// 			contacts.name as name 
-	// 		FROM letters 
-	// 		LEFT JOIN contacts 
-	// 		ON contacts.id = letters.contact_id 
-	// 		WHERE letters.writer_id = $this->id 
-	// 		AND letters.status = 'submitted' 
-	// 		ORDER BY letters.saved_date DESC 
-	// 		LIMIT 10
-	// 	");
-
-	// 	return $letters;
-	// }
-
-	public function getUnreadAndReadLetters() 
-	{
-		$letters = Letter::find_by_sql("
-			SELECT 
-				letters.id as id, 
-				letters.status as status, 
-				letters.saved_date as saved_date, 
-				contacts.name as name 
-			FROM letters 
-			LEFT JOIN contacts 
-			ON contacts.id = letters.contact_id 
-			WHERE letters.writer_id = $this->id 
-			AND letters.status IN('unread', 'read') 
-			ORDER BY letters.status DESC, letters.saved_date DESC
-		"); 
+		$letters = Letter::find("all", array(
+			"conditions" => "status IN ('saved', 'submitted', 'sent') 
+			AND writer_id = $this->id"
+		));
 
 		return $letters;
+	}
+
+	public function getContactLetters()
+	{	
+		$letters = ContactLetter::find_by_sql("
+			SELECT 
+				c.*
+			FROM contact_letters c 
+			LEFT JOIN writers2contacts w2c 
+			ON c.contact_id = w2c.contact_id 
+			AND w2c.writer_id = $this->id 
+			WHERE w2c.contact_id IS NOT NULL 
+			AND c.writer_id = $this->id; 
+		");
+
+		return $letters;
+	}
+
+	public function availableContacts()
+	{	
+		$contacts = Contact::find_by_sql("
+			SELECT 
+				c.id, 
+				c.name 
+			FROM contacts c
+			LEFT JOIN writers2contacts w2c
+			ON c.id = w2c.contact_id 
+			AND w2c.writer_id = $this->id
+			WHERE w2c.contact_id IS NULL; 
+		");
+
+		return $contacts;
+	}
+
+	public function assignedContacts()
+	{
+		$contacts = Contact::find_by_sql("
+			SELECT 
+				c.id, 
+				c.name 
+			FROM contacts c
+			LEFT JOIN writers2contacts w2c
+			ON c.id = w2c.contact_id 
+			AND w2c.writer_id = $this->id
+			WHERE w2c.contact_id IS NOT NULL; 
+		");
+
+		return $contacts;
 	}
 }

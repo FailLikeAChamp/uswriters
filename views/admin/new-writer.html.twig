@@ -25,9 +25,23 @@ Admin | New Writer
 	
 	</div>
 
+	<div class="row">
+
+		<div class="col-sm-6 col-sm-offset-2">
+
+			{% if flash.hasErrors() %}
+	 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
+	 		{% endif %}
+
+ 		</div>
+ 		
+	</div>
+
 	<div class="form-group col-sm-6 col-sm-offset-2">
 
 		<form id="create-writer" class="form-horizontal" method="POST" action="create.php">
+
+			<label class="control-label" for="username">Penpal Name: </label><input class="form-control" id="username" type="text" name="username" value="" required>
 
 			<label class="control-label" for="email">Email: </label><input class="form-control" id="email" type="email" name="email" value="" required="">
 
@@ -58,17 +72,8 @@ Admin | New Writer
 				<option value="female">Female</option>
 			</select>
 
-			<input type="hidden" name="admin_id" value="{{ admin_id }}">
-
 			<button id="submit" type="submit" class="btn btn-primary">Create Writer</button>
 
-			<div class="row">
-				<div class="col-sm-12 col-md-offset-2">
-					{% if flash.hasErrors() %}
-			 			{{ flash.display(constant(namespace~'FlashMessages::ERROR')) }}
-			 		{% endif %}
-		 		</div>
-			</div>
 
 		</form>
 	

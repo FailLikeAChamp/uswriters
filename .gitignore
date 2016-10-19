@@ -4,3 +4,5 @@ app/views_cache/*
 .htaccess
 composer.json
 composer.lock
+error_log
+pwupdate.php

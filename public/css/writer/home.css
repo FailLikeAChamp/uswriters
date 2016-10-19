@@ -16,7 +16,7 @@
 	cursor: default;
 }
 
-.submitted, .read {
+.submitted, .read, .sent {
 	color: salmon;
 }
 
@@ -24,7 +24,7 @@
 	float: right;
 }
 
-#closebt-container {
+#controlsContainer {
     position: relative;
     width: 100%;
     text-align: center;
@@ -45,18 +45,66 @@
     transform: rotate(90deg);
 }
 
-img {
+#address {
+	font-size: 16px;
+	margin-bottom: 50px;
+}
+
+#closeModal {
     vertical-align: middle;
 }
 
+#printModal, #closeModal {
+	height: 52px;
+	width: 52px;
+}
+
 #letter {
-	display: block;
+	border-radius: 0px;
+	display: none;
 	margin: 0px auto;
 	padding: 1rem 5rem;
 	width: 75%;
 }
 
+#closeModal {
+/*	float: right;
+	margin-bottom: 10px;*/
+	margin-left: 15px;
+}
 
+#printModal {
+/*	float: left;*/
+	cursor: pointer;
+	margin-right: 15px;
+}
+
+#spinner {
+	display: block;
+	margin: 0 auto;
+}
+
+figure {
+	display: inline-block;
+}
+
+figcaption {
+	color: white;
+	padding-right: 15px;
+    padding-top: 5px;
+    text-align: center;
+}
+
+figcaption.fig-right {
+	padding: 5px 0px 0px 15px;
+}
+
+#spinnerWrap, #letterBody {
+	display: none;
+}
+
+
+/* Larger than 768px */
 @media (min-width: 768px) {
 
 	.section {
@@ -65,6 +113,22 @@ img {
 
 	.panel-heading {
 		text-align: center;
+	}
+
+}
+
+
+/* Printing */
+@media print {
+
+	.container, #controlsContainer, #spinnerWrap {
+		display: none;
+	}
+
+	#letter {
+		border: none;
+		padding: 0;
+		width: 100%;
 	}
 
 }

@@ -69,6 +69,10 @@ Write Letters
 
 			<button id="letter-save" type="button" onclick="submitLetter('save')" class="letter-btn btn btn-primary">Save Draft</button>
 
+			{% if letter.id == "" %}
+			<a class="letter-btn btn btn-danger" href="/uswriters/writer/home">Cancel</a>
+			{% endif %}
+
 			{% if letter.id > 0 %}
 			<button id="letter-delete" type="button" onclick="deleteLetter()" class="letter-btn btn btn-danger">Delete Draft</button>
 			{% endif %}
@@ -102,8 +106,8 @@ tinymce.init({
 });
 </script>
 <script type="text/javascript">
+$(document).ready(function() {
 
-document.body.onload = function() {
 	const letterId = $("#letter_id").val();
 
 	if (letterId !== "") {
@@ -112,15 +116,13 @@ document.body.onload = function() {
 			if (data !== "error") {
 				editor = tinyMCE.get('letter');
 				editor.setContent(data);
+				confirmContactAddress({{ letter.getContactId }});
 			} else {
 				alert("Error: There was a problem retrieving the letter.");
 			}
 		});
 
 	}
-}
-
-$(document).ready(function() {
 
 	$("ul.dropdown-menu li").click(function() {
 
@@ -129,30 +131,7 @@ $(document).ready(function() {
 		const contactId = $self.data('contact-id');
 		const contactName = $self.text();
 
-		if (contactId > 0) {
-			$.get("../app/helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
-
-				const editor = tinyMCE.get('letter');
-
-				editor.dom.remove(editor.dom.select('section'));
-
-				letter = editor.getContent();
-
-				editor.setContent(data + letter);
-
-				if (letter === "") {
-					editor.dom.add(editor.getBody(), 'p', {}, '<br>');
-				}
-				
-				editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'font-size', '16px');
-				editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'margin-bottom', '50px');
-				
-				editor.selection.select(editor.getBody(), true);
-				editor.selection.collapse(false);
-				editor.focus();
-
-		    });
-		}
+		if (contactId > 0) confirmContactAddress(contactId);
 
 		if (contactName !== "No Contacts") {
 			$("#contact-list").text(contactName).append(" <span class='caret'></span>");
@@ -173,6 +152,31 @@ $(document).ready(function() {
 		return true;
 	}
 
+	function confirmContactAddress(contactId)
+	{
+		$.get("../app/helpers/getPrisonAddress.php?contact_id="+contactId, function(data, status) {
+
+			const editor = tinyMCE.get('letter');
+
+			editor.dom.remove(editor.dom.select('section'));
+
+			letter = editor.getContent();
+
+			editor.setContent(data + letter);
+
+			if (letter === "") {
+				editor.dom.add(editor.getBody(), 'p', {}, '<br>');
+			}
+			
+			editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'font-size', '16px');
+			editor.dom.setStyle(tinyMCE.activeEditor.dom.select('section'), 'margin-bottom', '50px');
+			
+			editor.selection.select(editor.getBody(), true);
+			editor.selection.collapse(false);
+			editor.focus();
+	    });
+	}
+
 	submitLetter = function(action)
 	{
 		if (action !== 'delete' && letterIsBlank()) {
@@ -185,6 +189,9 @@ $(document).ready(function() {
 		actionInput.val(action);
 
 		if (checkForContact()) {
+			const editor = tinyMCE.get('letter');
+
+			editor.dom.remove(editor.dom.select('section'));
 			$("#letter-form").submit();
 			return;
 		}

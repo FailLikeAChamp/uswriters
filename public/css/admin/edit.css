@@ -1,0 +1,70 @@
+h2, h3 {
+	text-align: center;
+}
+
+#penpal-wrap {
+	border: 1px solid #ccc;
+	display: none;
+	font-size: 1.45rem;
+}
+
+#penpal-wrap .well {
+	padding: 0;
+}
+
+#penpal-toggle {
+	position: absolute;
+    right: 15px;
+    top: 55%;
+    width: 124px;
+}
+
+#name {
+	width: 50%;
+}
+
+#delete {
+	margin-top: 15px;
+}
+
+.assigned {
+	background-color: rgba(98, 237, 88, 0.2);
+}
+
+.unassigned {
+	background-color: rgba(240, 24, 28, 0.1);
+}
+
+.assigned, .unassigned {
+	border: 1px solid #ccc;
+}
+
+.glyphicon-remove {
+	color: rgba(240, 24, 28, 0.7);
+	float: right;
+	top: 0;
+}
+
+.glyphicon-remove:before, .glyphicon-plus:before {
+	font-size: 1.3em;
+}
+
+.glyphicon-remove:hover, .glyphicon-plus:hover {
+	font-size: 1.2em;
+    left: 2px;
+    bottom: 2px;
+}
+
+.glyphicon-plus:hover, .glyphicon-remove:hover {
+	cursor: pointer;
+}
+
+.glyphicon-plus {
+	color: rgba(40, 122, 19, 0.7);
+	float: right;
+	top: 0;
+}
+
+.form-inline .form-control {
+	width: 50%;
+}

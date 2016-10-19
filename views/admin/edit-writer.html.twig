@@ -6,6 +6,10 @@
 Admin | Edit Writer
 {% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="../public/css/admin/edit.css">
+{% endblock %}
+
 {% block navbar %}
 {% include 'admin-navbar.html.twig' %}
 {% endblock %}
@@ -13,82 +17,192 @@ Admin | Edit Writer
 {% block content %}
 <div class="container">
 
-	<div class="row">
-		<div class="col-sm-6 col-sm-offset-2">
+	<section class="row">
+
+		<div class="col-sm-6 col-sm-offset-3">
 			{% if flash.hasMessages() %}
 				{{ flash.display() }}
 			{% endif %}
 		</div>
-	</div>
+		
+	</section>
 
-	<div class="row">
+	<section class="row">
 
-		<div class="col-sm-6 col-sm-offset-2">
+		<div class="col-sm-6 col-sm-offset-3">
 		
 			<h2>Edit Writer</h2>
 
 			<hr>
 
-			<form id="name" action="" method="POST">
+			<form class="form-inline" id="name" action="" method="POST">
+				
+				<div class="form-group">
 
-				<label for="nameSelect">Select A Writer: </label>
-				<select id="nameSelect" name="writer_id">
+					<label class="control-label" for="nameSelect">Select A Writer: </label>
+
+					<select class="form-control" id="nameSelect" name="writer_id">
 						<option value=""></option>
-				{% for w in allWriters %}
+					{% for w in allWriters %}
 						<option value="{{ w.id }}">{{ w.name | title }}</option>
-				{% endfor %}
-				</select>
+					{% endfor %}
+					</select>
 
-				<button class="btn btn-primary btn-xs" type="submit">Select</button>
+				</div>
 
-			</form>
+			</form>	
 
-			
+			{% if writer.id %}
+			<button class="btn btn-info" id="penpal-toggle">Assign PenPals</button>
+			{% endif %}
+
+			<hr>
 
 		</div>
 	
-	</div>
+	</section>
 	
 	{% if writer.id %}
-	<div class="form-group col-sm-6 col-sm-offset-2">
 
-		<form id="create-writer" class="form-horizontal" method="POST" action="update.php">
+	<section class="row">
 
-			<label class="control-label" for="email">Email: </label><input class="form-control" id="email" type="email" name="email" value="{{ writer.email }}" required="">
+		<div id="penpal-wrap" class="well col-sm-10 col-sm-offset-1">
+			
+			<ul id="unassigned-penpals" class="col-sm-6 list-group">
+				<h3>Unassigned</h3>
+			{% for c in availableContacts %}
+					<li class="list-group-item unassigned" data-contact-id="{{ c.id }}">
+						{{ c.name | title }} <span title="Assign" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+					</li>
+			{% endfor %}
+			</ul>
+			<ul id="assigned-penpals" class="col-sm-6 list-group">
+				<h3>Assigned</h3>
+			{% for c in assignedContacts %}
+					<li class="list-group-item assigned" data-contact-id="{{ c.id }}">
+						{{ c.name | title }} <span title="Unassign" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</li>
+			{% endfor %}
+			</ul>
 
-			<label class="control-label" for="name">Name: </label><input class="form-control" id="name" type="text" name="name" value="{{ writer.name }}" required>
+	{# 		<div class="col-sm-12">
+				<hr>	
+			</div> #}
 
-			<label class="control-label" for="address_1">Address 1: </label><input class="form-control" id="address_1" type="text" name="address_1" value="{{ writer.address_1 }}" required>
+		</div>
 
-			<label class="control-label" for="address_2">Address 2: </label><input class="form-control" id="address_2" type="text" name="address_2" value="{{ writer.address_2 }}">
-
-			<label class="control-label" for="city">City: </label><input class="form-control" id="city" type="text" name="city" value="{{ writer.city }}" required>
-		
-			<label class="control-label" for="state">State: </label>
-			<select id="state" name="state" class="form-control">
-				<option value="{{ writer.state }}">{{ writer.state }}</option>
-				{% include 'states.html.twig' %}
-			</select>
-
-			<label class="control-label postal" for="postal_code">Postal Code: </label><input class="form-control postal" id="postal_code" type="text" name="postal_code" value="{{ writer.postal_code }}" required>
-
-			<label class="control-label" for="phone">Phone: </label><input class="form-control" id="phone" type="text" name="phone" value="{{ writer.phone }}" required>
-
-			<label class="control-label" for="gender">Gender: </label>
-			<select name="gender" id="gender" class="form-control">
-				<option value="{{ writer.gender }}">{{ writer.gender | title }}</option>
-				<option value="male">Male</option>
-				<option value="female">Female</option>
-			</select>
-
-			<input type="hidden" name="id" value="{{ writer.id }}">
-
-			<button id="submit" type="submit" class="btn btn-primary">Update Writer</button>
-
-		</form>
+	</section>
 	
-	</div>
+	<section class="row">
+
+		<div class="form-group col-sm-6 col-sm-offset-3">
+
+			<form id="create-writer" class="form-horizontal" method="POST" action="update.php">
+
+				<label class="control-label" for="username">Penpal Name: </label><input class="form-control" id="username" type="text" name="username" value="{{ writer.display_name }}" required>
+
+				<label class="control-label" for="password">Password: </label><input class="form-control" id="password" type="text" name="password" value="" placeholder="Leave blank to not update">
+
+				<label class="control-label" for="email">Email: </label><input class="form-control" id="email" type="email" name="email" value="{{ writer.email }}" required="">
+
+				<label class="control-label" for="name">Name: </label><input class="form-control" id="name" type="text" name="name" value="{{ writer.name }}" required>
+
+				<label class="control-label" for="address_1">Address 1: </label><input class="form-control" id="address_1" type="text" name="address_1" value="{{ writer.address_1 }}" required>
+
+				<label class="control-label" for="address_2">Address 2: </label><input class="form-control" id="address_2" type="text" name="address_2" value="{{ writer.address_2 }}">
+
+				<label class="control-label" for="city">City: </label><input class="form-control" id="city" type="text" name="city" value="{{ writer.city }}" required>
+			
+				<label class="control-label" for="state">State: </label>
+				<select id="state" name="state" class="form-control">
+					<option value="{{ writer.state }}">{{ writer.state }}</option>
+					{% include 'states.html.twig' %}
+				</select>
+
+				<label class="control-label postal" for="postal_code">Postal Code: </label><input class="form-control postal" id="postal_code" type="text" name="postal_code" value="{{ writer.postal_code }}" required>
+
+				<label class="control-label" for="phone">Phone: </label><input class="form-control" id="phone" type="text" name="phone" value="{{ writer.phone }}" required>
+
+				<label class="control-label" for="gender">Gender: </label>
+				<select name="gender" id="gender" class="form-control">
+					<option value="{{ writer.gender }}">{{ writer.gender | title }}</option>
+					<option value="male">Male</option>
+					<option value="female">Female</option>
+				</select>
+
+				<input id="writer_id" type="hidden" name="id" value="{{ writer.id }}">
+
+				<button id="submit" type="submit" class="btn btn-primary">Update Writer</button>
+
+				<button id="delete" class="btn btn-danger" type="button" onclick="deleteWriter({{ writer.id }})">Delete Writer</button>
+
+			</form>
+
+		</div>
+	
+	</section>
 	{% endif %}
 	
 </div> <!-- /container -->
+{% endblock %}
+{% block javascript %}
+<script>
+	$("#nameSelect").on("change", function() {
+		if ($("#nameSelect").val() != "") {
+			$("#name").submit();
+		}
+	});
+
+	function deleteWriter(id)
+	{
+		if (confirm("Are you sure you want to delete this writer?")) {
+			// delete writer
+			window.location.assign('delete.php?writerId='+id);
+		}
+	}
+
+	$("#penpal-toggle").click(function() {
+		if ($(this).text() == "Assign PenPals") {
+			$(this).text("Hide PenPals");
+		} else {
+			$(this).text("Assign PenPals");
+		}
+
+		$("#penpal-wrap").slideToggle(500);
+	});
+
+	$('#unassigned-penpals').on("click", ".glyphicon-plus", function() {
+		let $parent = $(this).parent("li.unassigned");
+		let contactId = $parent.data("contact-id");
+		let writerId = $("#writer_id").val();
+
+		$(this).removeClass("glyphicon-plus").addClass("glyphicon-remove");
+
+	    $('#assigned-penpals').append($parent);
+
+	    $parent.removeClass("unassigned").addClass("assigned");
+
+	    // fire ajax to add to db
+	    $.get("../app/helpers/assignPenpals.php?action=insert&contactId="+contactId+"&writerId="+writerId, 
+	    	function(data, status) {});
+
+	});
+
+	$('#assigned-penpals').on("click", ".glyphicon-remove", function() {
+		let $parent = $(this).parent("li.assigned");
+		let contactId = $parent.data("contact-id");
+		let writerId = $("#writer_id").val();
+
+		$(this).removeClass("glyphicon-remove").addClass("glyphicon-plus");
+
+	    $('#unassigned-penpals').append($parent);
+
+	    $parent.removeClass("assigned").addClass("unassigned");
+
+	    // fire ajax to remove from db
+	    $.get("../app/helpers/assignPenpals.php?action=delete&contactId="+contactId+"&writerId="+writerId, 
+	    	function(data, status) {});
+
+	});
+</script>
 {% endblock %}

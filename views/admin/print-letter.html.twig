@@ -10,6 +10,16 @@ Admin | Print
 
 {% block content %}
 <div class="letter-wrap">
+
+	<div id="return-address">
+		
+		<div id="return-name">{{ writer }}</div>
+		<div>US Pen Pal Writers</div>
+		<div>PO Box 514</div>
+		<div>Ada, MI 49301</div>
+	
+	</div>
+	{{ contactAddress | raw }}
 	{{ letter.getHtmlVersion | raw }}
 
 </div>

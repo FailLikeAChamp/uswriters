@@ -6,6 +6,10 @@
 Admin | Edit Prison
 {% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="../public/css/admin/edit.css">
+{% endblock %}
+
 {% block navbar %}
 {% include 'admin-navbar.html.twig' %}
 {% endblock %}
@@ -13,71 +17,89 @@ Admin | Edit Prison
 {% block content %}
 <div class="container">
 
-	<div class="row">
-		<div class="col-sm-6 col-sm-offset-2">
+	<section class="row">
+
+		<div class="col-sm-6 col-sm-offset-3">
 			{% if flash.hasMessages() %}
 				{{ flash.display() }}
 			{% endif %}
 		</div>
-	</div>
 
-	<div class="row">
+	</section>
 
-		<div class="col-sm-6 col-sm-offset-2">
+	<section class="row">
+
+		<div class="col-sm-6 col-sm-offset-3">
 		
 			<h2>Edit Prison</h2>
 
 			<hr>
 
-			<form id="name" action="" method="POST">
+			<form class="form-inline" id="name" action="" method="POST">
 
-				<label for="nameSelect">Select A Prison: </label>
-				<select id="nameSelect" name="prison_id">
-						<option value=""></option>
-				{% for p in allPrisons %}
-						<option value="{{ p.id }}">{{ p.name | title }}</option>
-				{% endfor %}
-				</select>
+				<div class="form-group">
 
-				<button class="btn btn-primary btn-xs" type="submit">Select</button>
+					<label class="control-label" for="nameSelect">Select A Prison: </label>
+
+					<select class="form-control" id="nameSelect" name="prison_id">
+							<option value=""></option>
+					{% for p in allPrisons %}
+							<option value="{{ p.id }}">{{ p.name | title }}</option>
+					{% endfor %}
+					</select>
+
+				</div>
 
 			</form>
 
-			
+			<hr>
 
 		</div>
 	
-	</div>
+	</section>
 	
 	{% if prison.id %}
-	<div class="form-group col-sm-6 col-sm-offset-2">
+	<section class="row">
 
-		<form id="create-contact" class="form-horizontal" method="POST" action="update.php">
+		<div class="form-group col-sm-6 col-sm-offset-3">
 
-			<label class="control-label" for="name">Name: </label><input class="form-control" id="name" type="text" name="name" value="{{ prison.name }}" required>
+			<form id="edit-prison" class="form-horizontal" method="POST" action="update.php">
 
-			<label class="control-label" for="address_1">Address 1: </label><input class="form-control" id="address_1" type="text" name="address_1" value="{{ prison.address_1 }}" required>
+				<label class="control-label" for="name">Name: </label><input class="form-control" id="name" type="text" name="name" value="{{ prison.name }}" required>
 
-			<label class="control-label" for="address_2">Address 2: </label><input class="form-control" id="address_2" type="text" name="address_2" value="{{ prison.address_2 }}">
+				<label class="control-label" for="address_1">Address 1: </label><input class="form-control" id="address_1" type="text" name="address_1" value="{{ prison.address_1 }}" required>
 
-			<label class="control-label" for="city">City: </label><input class="form-control" id="city" type="text" name="city" value="{{ prison.city }}" required>
-		
-			<label class="control-label" for="state">State: </label>
-			<select id="state" name="state" class="form-control">
-				<option value="{{ prison.state }}">{{ prison.state }}</option>
-				{% include 'states.html.twig' %}
-			</select>
+				<label class="control-label" for="address_2">Address 2: </label><input class="form-control" id="address_2" type="text" name="address_2" value="{{ prison.address_2 }}">
 
-			<label class="control-label postal" for="postal_code">Postal Code: </label><input class="form-control postal" id="postal_code" type="text" name="postal_code" value="{{ prison.postal_code }}" required>
+				<label class="control-label" for="city">City: </label><input class="form-control" id="city" type="text" name="city" value="{{ prison.city }}" required>
+			
+				<label class="control-label" for="state">State: </label>
+				<select id="state" name="state" class="form-control">
+					<option value="{{ prison.state }}">{{ prison.state }}</option>
+					{% include 'states.html.twig' %}
+				</select>
 
-			<input type="hidden" name="id" value="{{ prison.id }}">
+				<label class="control-label postal" for="postal_code">Postal Code: </label><input class="form-control postal" id="postal_code" type="text" name="postal_code" value="{{ prison.postal_code }}" required>
 
-			<button id="submit" type="submit" class="btn btn-primary">Update Prison</button>
+				<input type="hidden" name="id" value="{{ prison.id }}">
 
-		</form>
+				<button id="submit" type="submit" class="btn btn-primary">Update Prison</button>
+
+			</form>
+
+		</div>
 	
-	</div>
+	</section>
 	{% endif %}
 	
 </div> <!-- /container -->
+{% endblock %}
+{% block javascript %}
+<script>
+	$("#nameSelect").on("change", function() {
+		if ($("#nameSelect").val() != "") {
+			$("#name").submit();
+		}
+	});
+</script>
 {% endblock %}

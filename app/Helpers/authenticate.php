@@ -27,7 +27,7 @@ function authenticateWriter($email, $password)
 
 	if ($writer != null && $writer->login($password)) {
 		$_SESSION['writer_id'] = $writer->id;
-		$_SESSION['writer_name'] = $writer->name;
+		$_SESSION['writer_name'] = $writer->display_name;
 		$name = ucwords($writer->name);
 		header("location: /uswriters/writer/home");
 		exit();

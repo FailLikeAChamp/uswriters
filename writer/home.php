@@ -2,6 +2,7 @@
 require_once('../app/start.php');
 
 use \UsWriters\Models\Writer;
+use \UsWriters\Models\Letter;
 
 isWriterLoggedOut();
 
@@ -9,13 +10,10 @@ isWriterLoggedOut();
 $writer = Writer::find($_SESSION['writer_id']);
 
 // get saved drafts & sent letters
-// $draftLetters = $writer->getDrafts();
-// $sentLetters = $writer->getSentLetters();
-// $myLetters = array_merge($draftLetters, $sentLetters);
-$writerLetters = $writer->getDraftsAndSentLetters();
+$writerLetters = $writer->getLetters();
 
-// get unread letters and letters that have been read
-$contactLetters = $writer->getUnreadAndReadLetters();
+// get contact letters
+$contactLetters = $writer->getContactLetters();
 
 echo $twig->render('@writer/home.html.twig', array(
 		'myLetters' => $writerLetters,

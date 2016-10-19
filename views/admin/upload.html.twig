@@ -19,9 +19,23 @@ Admin | Upload
 
 		<div class="col-xs-12">
 
+			{% if flash.hasMessages() %}
+				{{ flash.display() }}
+			{% endif %}
+
+		</div>
+
+	</div>
+
+	<div class="row">
+
+		<div class="col-xs-12">
+
 			<form method="POST" action="letter-upload.php" enctype="multipart/form-data">
 
-			  <input name="filesToUpload[]" id="filesToUpload" type="file" multiple="" onchange="makeFileList()" />
+				<input name="filesToUpload[]" id="filesToUpload" type="file" multiple="" onchange="makeFileList()" />
+
+				<button type="submit">Upload</button>
 
 			</form>
 
@@ -34,6 +48,7 @@ Admin | Upload
 				<li>No Files Selected</li>
 
 			</ul>
+
 
 		</div>
 

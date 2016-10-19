@@ -1,10 +1,41 @@
+#return-address {
+	font-size: 16px;
+	margin-bottom: 73px;
+}
+
+.fade-tr, .sent-tr button.btn-danger {
+	opacity: .3;
+}
+
+.center-text {
+	text-align: center;
+}
+
+.center-btn {
+	display: block;
+	margin: auto;
+}
+
+.filter:hover {
+	cursor: pointer;
+}
+
 @media print {
 	body {
 		padding: 10px 40px;
 	}
 
-	#contact-address {
-		font-size: 16px;
-	    margin-bottom: 50px;
+	#contact-address, #address {
+	    margin-bottom: 60px;
+	}
+
+	#contact-address > div, #address > div {
+		font-size: 14px;
+	}
+
+	#return-address {
+		font-size: 14px;
+		margin-top: 30px;
+		margin-bottom: 73px;
 	}
 }

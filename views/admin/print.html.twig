@@ -40,15 +40,25 @@ Admin | Print
 								<th>Contact</th>
 								<th>Submitted On</th>
 								<th></th>
+								<th id="toggle-sent-letters" class="center-text filter">Show Sent <span class="caret"></span></th>
 							</tr>
 						</thead>
 						<tbody>
 						{% for letter in letters %}
-							<tr>
+							<tr 
+								{% if letter.status == "sent" %} 
+									class="sent-tr" 
+								{% endif %}
+							>
 								<td>{{ letter.getWriterName | title }}</td>
 								<td>{{ letter.getContactName | title }}</td>
 								<td>{{ letter.submitted_date | date("m/d/Y") }}</td>
-								<td><button type="button" class="btn btn-primary btn-xs print" onclick="printLetter({{ letter.id }})">Print</button></td>
+								<td>
+									<button type="button" class="btn btn-primary btn-xs print center-btn" onclick="printLetter({{ letter.id }})">Print</button>
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger btn-xs center-btn" onclick="letterSent(self, {{ letter.id }})">Mark Sent</button>
+								</td>
 							</tr>
 						{% endfor %}
 						</tbody>
@@ -73,11 +83,60 @@ Admin | Print
 
 {% block javascript %}
 <script>
-	
-const printLetter = function(letterId)
-{
-	window.open('print.php?letter_id='+letterId, '_blank');
-}
+$('.sent-tr').hide();
 
+// show/hide sent letters
+$("#toggle-sent-letters").click(function() {
+	let $self = $(this);
+
+	if ($self.hasClass('dropup')) {
+		$('.sent-tr').hide();
+		$self.text("Show Sent");
+		$self.append("<span class='caret'></span>");
+		$self.removeClass('dropup');	
+	} else {
+		$('.sent-tr').show();		
+		$self.text("Hide Sent");
+		$self.append("<span class='caret'></span>");
+		$self.addClass('dropup');
+	}
+	
+});
+
+// open print page for letter with specific id
+const printLetter = function(letterId) {
+	window.open('print.php?letter_id='+letterId, '_blank');
+}; // end printLetter
+
+// mark letter as sent in database
+const letterSent = function(event, letterId) {
+	let $self = $(event.event.target);
+	let $parentRow = $self.closest('tr');
+
+	// if this is not marked sent already
+	if (!$parentRow.hasClass('sent-tr')) {
+
+		// fade tr to show that it is being removed
+		$parentRow.addClass('fade-tr');
+		
+		// send request to mark letter as sent
+		$.post(
+			"../app/helpers/letterSent.php", 
+			{ letterId: letterId }, 
+			function(result) {
+	        	if (result === "success") {
+	        		$parentRow.addClass('sent-tr').removeClass('fade-tr');
+	        		// if sent letters are not showing, hide the one we just marked sent
+	        		if (!$("#toggle-sent-letters").hasClass('dropup')) {
+	        			$parentRow.hide();
+	        		}
+	        	} else {
+	        		alert("Failed to mark letter sent");
+	        	}
+	    	}
+	    ); // end post request
+	}
+	
+};
 </script>
 {% endblock %}
